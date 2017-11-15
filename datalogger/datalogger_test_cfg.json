@@ -2,5 +2,9 @@
 	"system_name":		"satelite42",
 	"server_addr":		"http://localhost:9000",
 	"server_login":		"gagarin",
-	"server_password":	"soyuz"
+	"server_password":	"soyuz",
+	"data_inputs":		[
+		{"name": "Hatch 1 Lock"},
+		{"name": "Hatch 2 Lock"}
+	]
 }

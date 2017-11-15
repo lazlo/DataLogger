@@ -41,6 +41,10 @@ class ConfigTestCase(unittest.TestCase):
 		c1.server_addr = "http://localhost:9000"
 		c1.server_login = "gagarin"
 		c1.server_password = "soyuz"
+		c1.data_inputs = [
+			{"name": "Hatch 1 Lock"},
+			{"name": "Hatch 2 Lock"}
+		]
 		c2 = config.Config()
 		c2.load_file("datalogger_test_cfg.json")
 		self.assertEqual(c1.__dict__, c2.__dict__)

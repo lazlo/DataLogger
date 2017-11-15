@@ -28,3 +28,4 @@ class Config():
 		self.server_addr = d["server_addr"]
 		self.server_login = d["server_login"]
 		self.server_password = d["server_password"]
+		self.data_inputs = d["data_inputs"]
