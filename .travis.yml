@@ -1,0 +1,3 @@
+language: python
+dist: trusty
+script: make -C data_logger
