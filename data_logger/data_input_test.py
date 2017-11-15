@@ -10,9 +10,10 @@ class DataInputTestCase(unittest.TestCase):
 
 	def testName_isSet(self):
 		self.assertEqual(self.expectedName, self.di.name)
-	# name
-	# type
-	# source
+
+	def testGetData_raisesNotImplementedError(self):
+		with self.assertRaises(NotImplementedError):
+			self.di.get_data()
 
 if __name__ == "__main__":
 	unittest.main()
