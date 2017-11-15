@@ -30,5 +30,15 @@ class ConfigTestCase(unittest.TestCase):
 	def testIsValid_returnsTrueWhenAllRequiredFieldsAreNotEmpty(self):
 		self.assertEqual(True, self.cfg.is_valid())
 
+	def testLoadFile_setsFieldsFromJSONFile(self):
+		c1 = config.Config()
+		c1.system_name = "satelite42"
+		c1.server_addr = "http://localhost:9000"
+		c1.server_login = "gagarin"
+		c1.server_password = "soyuz"
+		c2 = config.Config()
+		c2.load_file("datalogger_test_cfg.json")
+		self.assertEqual(c1.__dict__, c2.__dict__)
+
 if __name__ == "__main__":
 	unittest.main()

@@ -1,3 +1,5 @@
+import json
+
 class Config():
 
 	def __init__(self):
@@ -16,3 +18,10 @@ class Config():
 		if not self.server_password:
 			return False
 		return True
+
+	def load_file(self, cfgfile):
+		d = json.loads(open(cfgfile).read())
+		self.system_name = d["system_name"]
+		self.server_addr = d["server_addr"]
+		self.server_login = d["server_login"]
+		self.server_password = d["server_password"]

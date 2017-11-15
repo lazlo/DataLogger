@@ -1,0 +1,6 @@
+{
+	"system_name":		"satelite42",
+	"server_addr":		"http://localhost:9000",
+	"server_login":		"gagarin",
+	"server_password":	"soyuz"
+}
