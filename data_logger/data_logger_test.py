@@ -2,6 +2,7 @@ import unittest
 
 import data_logger
 import config
+import data_store
 import data_input
 
 class DataLoggerTestCase(unittest.TestCase):
@@ -11,6 +12,9 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.expectedCfg = config.Config()
 		self.expectedCfg.load_file(self.expectedCfgFile)
 		self.dl = data_logger.DataLogger(self.expectedCfg)
+
+	def testInit_dataStoreIsObject(self):
+		self.assertEqual(True, isinstance(self.dl.data_store, data_store.DataStore))
 
 	def testInit_dataInputsIsPopulatedAccordingToConfig(self):
 		self.assertEqual(len(self.expectedCfg.data_inputs), len(self.dl.data_inputs))
