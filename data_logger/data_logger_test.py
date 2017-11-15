@@ -11,7 +11,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.expectedCfg.load_file(self.expectedCfgFile)
 		self.dl = data_logger.DataLogger(self.expectedCfg)
 
-	def testInit_populatesDataInputsAccordingToConfig(self):
+	def testInit_dataInputsIsPopulatedAccordingToConfig(self):
 		self.assertEqual(len(self.expectedCfg.data_inputs), len(self.dl.data_inputs))
 
 if __name__ == "__main__":
