@@ -1,4 +1,5 @@
 import unittest
+import json
 
 import config
 
@@ -36,18 +37,11 @@ class ConfigTestCase(unittest.TestCase):
 		self.assertEqual(True, self.cfg.is_valid())
 
 	def testLoadFile_setsFieldsFromJSONFile(self):
-		c1 = config.Config()
-		c1.system_name = "satelite42"
-		c1.server_addr = "http://localhost:9000"
-		c1.server_login = "gagarin"
-		c1.server_password = "soyuz"
-		c1.data_inputs = [
-			{"name": "Hatch 1 Lock"},
-			{"name": "Hatch 2 Lock"}
-		]
+		test_cfg_file = "data_logger_test_cfg.json"
+		c1 = json.loads(open(test_cfg_file).read())
 		c2 = config.Config()
-		c2.load_file("data_logger_test_cfg.json")
-		self.assertEqual(c1.__dict__, c2.__dict__)
+		c2.load_file(test_cfg_file)
+		self.assertEqual(c1, c2.__dict__)
 
 if __name__ == "__main__":
 	unittest.main()
