@@ -46,7 +46,7 @@ class ConfigTestCase(unittest.TestCase):
 			{"name": "Hatch 2 Lock"}
 		]
 		c2 = config.Config()
-		c2.load_file("datalogger_test_cfg.json")
+		c2.load_file("data_logger_test_cfg.json")
 		self.assertEqual(c1.__dict__, c2.__dict__)
 
 if __name__ == "__main__":
