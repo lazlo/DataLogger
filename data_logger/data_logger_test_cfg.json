@@ -5,6 +5,15 @@
 	"server_password":	"soyuz",
 	"data_inputs":		[
 		{"name": "Hatch 1 Lock"},
-		{"name": "Hatch 2 Lock"}
+		{"name": "Hatch 2 Lock"},
+		{"name": "Ignition"},
+		{"name": "Position"},
+		{"name": "Acceleration"},
+		{"name": "Temperature Room 1"},
+		{"name": "Temperature Room 2"},
+		{"name": "Temperature Room 3"},
+		{"name": "Temperature Room 4"},
+		{"name": "Camera Room 1"},
+		{"name": "Camera Room 2"}
 	]
 }
