@@ -11,3 +11,9 @@ class PositionTestCase(unittest.TestCase):
 
 	def testIsSubclassOfDataInput(self):
 		self.assertEqual(True, issubclass(position.Position, data_input.DataInput))
+
+	def testGetData_returnsDictWithKeyLat(self):
+		self.assertEqual(True, "lat" in self.pos.get_data().keys())
+
+	def testGetData_returnsDictWithKeyLon(self):
+		self.assertEqual(True, "lon" in self.pos.get_data().keys())
