@@ -7,3 +7,8 @@ class DataServer():
 		self.user = user
 		self.password = password
 		self.httpconn = httplib.HTTPConnection(self.addr)
+
+	def upload(self):
+		method = ""
+		url = ""
+		self.httpconn.request(method, url)

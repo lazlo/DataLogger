@@ -3,6 +3,12 @@ import unittest
 import data_server
 import httplib
 
+httpconn_request_called = False
+
+def fake_httpconn_request(method, url, body=None, headers=None):
+	global httpconn_request_called
+	httpconn_request_called = True
+
 class DataServerTestCase(unittest.TestCase):
 
 	def setUp(self):
@@ -25,3 +31,10 @@ class DataServerTestCase(unittest.TestCase):
 
 	def testInit_httpConnHostIsSetToConfigValue(self):
 		self.assertEqual(self.expectedAddr, self.srv.httpconn.host)
+
+	def testUpload_callsHttpConnRequestMethodWithFirstArgPost(self):
+		global httpconn_request_called
+		httpconn_request_called = False
+		self.srv.httpconn.request = fake_httpconn_request
+		self.srv.upload()
+		self.assertEqual(True, httpconn_request_called)
