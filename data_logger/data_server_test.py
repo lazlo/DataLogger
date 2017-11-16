@@ -1,6 +1,7 @@
 import unittest
 
 import data_server
+import httplib
 
 class DataServerTestCase(unittest.TestCase):
 
@@ -18,3 +19,6 @@ class DataServerTestCase(unittest.TestCase):
 
 	def testInit_passwordIsSet(self):
 		self.assertEqual(self.expectedPassword, self.srv.password)
+
+	def testInit_httpConnIsInstanceOfHTTPConnection(self):
+		self.assertEqual(True, isinstance(self.srv.httpconn, httplib.HTTPConnection))
