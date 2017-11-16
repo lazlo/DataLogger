@@ -7,6 +7,9 @@ class DataLogger():
 		self.config = config
 		self.data_store = data_store.DataStore()
 		self.data_inputs = []
+		self._populate_data_inputs()
+
+	def _populate_data_inputs(self):
 		for di_cfg in self.config.data_inputs:
 			di_class = getattr(data_input, di_cfg["class"])
 			di_obj = di_class(di_cfg["name"])
