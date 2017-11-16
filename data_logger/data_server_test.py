@@ -32,7 +32,7 @@ class DataServerTestCase(unittest.TestCase):
 	def testInit_httpConnHostIsSetToConfigValue(self):
 		self.assertEqual(self.expectedAddr, self.srv.httpconn.host)
 
-	def testUpload_callsHttpConnRequestMethodWithFirstArgPost(self):
+	def testUpload_callsHttpConnRequest(self):
 		global httpconn_request_called
 		httpconn_request_called = False
 		self.srv.httpconn.request = fake_httpconn_request
