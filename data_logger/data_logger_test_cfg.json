@@ -3,6 +3,7 @@
 	"server_addr":		"http://localhost:9000",
 	"server_login":		"gagarin",
 	"server_password":	"soyuz",
+	"server_upload_period_sec":	1,
 	"server_poll_period_sec":	1,
 	"data_inputs":		[
 		{"name": "Hatch 1 Lock",	"class": "Pin"},

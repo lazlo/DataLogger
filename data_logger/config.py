@@ -8,6 +8,7 @@ class Config():
 		self.server_addr = None
 		self.server_login = None
 		self.server_password = None
+		self.server_upload_period_sec = None
 		self.server_poll_period_sec = None
 		self.data_inputs = None
 
@@ -19,6 +20,8 @@ class Config():
 		if not self.server_login:
 			return False
 		if not self.server_password:
+			return False
+		if not self.server_upload_period_sec:
 			return False
 		if not self.server_poll_period_sec:
 			return False
@@ -59,6 +62,7 @@ class Config():
 		self.server_addr = d["server_addr"]
 		self.server_login = d["server_login"]
 		self.server_password = d["server_password"]
+		self.server_upload_period_sec = d["server_upload_period_sec"]
 		self.server_poll_period_sec = d["server_poll_period_sec"]
 		self.data_inputs = d["data_inputs"]
 

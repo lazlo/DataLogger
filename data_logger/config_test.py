@@ -11,6 +11,7 @@ class ConfigTestCase(unittest.TestCase):
 		self.cfg.server_addr = "http://localhost:8111"
 		self.cfg.server_login = "eris"
 		self.cfg.server_password = "fnord2342"
+		self.cfg.server_upload_period_sec = 42
 		self.cfg.server_poll_period_sec = 23
 		self.cfg.data_inputs = [{"name": "Door Status", "class": "Pin"}]
 
@@ -28,6 +29,10 @@ class ConfigTestCase(unittest.TestCase):
 
 	def testIsValid_returnsFalseWhenServerPasswordIsEmpty(self):
 		self.cfg.server_password = None
+		self.assertEqual(False, self.cfg.is_valid())
+
+	def testIsValid_returnsFalseWhenServerUploadPeriodSecIsEmpty(self):
+		self.cfg.server_upload_period_sec = None
 		self.assertEqual(False, self.cfg.is_valid())
 
 	def testIsValid_returnsFalseWhenServerPollPeriodSecIsEmpty(self):
