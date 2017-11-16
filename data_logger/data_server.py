@@ -9,6 +9,6 @@ class DataServer():
 		self.httpconn = httplib.HTTPConnection(self.addr)
 
 	def upload(self):
-		method = ""
+		method = "POST"
 		url = ""
 		self.httpconn.request(method, url)

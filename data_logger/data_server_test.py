@@ -4,10 +4,13 @@ import data_server
 import httplib
 
 httpconn_request_called = False
+httpconn_request_arg_method = None
 
 def fake_httpconn_request(method, url, body=None, headers=None):
 	global httpconn_request_called
+	global httpconn_request_arg_method
 	httpconn_request_called = True
+	httpconn_request_arg_method = method
 
 class DataServerTestCase(unittest.TestCase):
 
@@ -38,3 +41,10 @@ class DataServerTestCase(unittest.TestCase):
 		self.srv.httpconn.request = fake_httpconn_request
 		self.srv.upload()
 		self.assertEqual(True, httpconn_request_called)
+
+	def testUpload_callsHttpConnRequestWithFirstArgumentMethodPost(self):
+		global httpconn_request_arg_method
+		httpconn_request_arg_method = None
+		self.srv.httpconn.request = fake_httpconn_request
+		self.srv.upload()
+		self.assertEqual("POST", httpconn_request_arg_method)
