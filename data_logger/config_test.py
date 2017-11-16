@@ -30,7 +30,7 @@ class ConfigTestCase(unittest.TestCase):
 		self.cfg.server_password = None
 		self.assertEqual(False, self.cfg.is_valid())
 
-	def testIsValid_returnsFalseWhenServerPollPeriodSec(self):
+	def testIsValid_returnsFalseWhenServerPollPeriodSecIsEmpty(self):
 		self.cfg.server_poll_period_sec = None
 		self.assertEqual(False, self.cfg.is_valid())
 
