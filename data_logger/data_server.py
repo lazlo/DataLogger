@@ -11,4 +11,6 @@ class DataServer():
 	def upload(self):
 		method = "POST"
 		url = ""
-		self.httpconn.request(method, url)
+		body = None
+		headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+		self.httpconn.request(method, url, body, headers)
