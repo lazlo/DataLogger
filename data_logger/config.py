@@ -6,7 +6,7 @@ class Config():
 	def __init__(self):
 		self.system_name = None
 		self.server_addr = None
-		self.server_login = None
+		self.server_user = None
 		self.server_password = None
 		self.server_upload_period_sec = None
 		self.server_poll_period_sec = None
@@ -17,7 +17,7 @@ class Config():
 			return False
 		if not self.server_addr:
 			return False
-		if not self.server_login:
+		if not self.server_user:
 			return False
 		if not self.server_password:
 			return False
@@ -60,7 +60,7 @@ class Config():
 		d = json.loads(open(cfgfile).read())
 		self.system_name = d["system_name"]
 		self.server_addr = d["server_addr"]
-		self.server_login = d["server_login"]
+		self.server_user = d["server_user"]
 		self.server_password = d["server_password"]
 		self.server_upload_period_sec = d["server_upload_period_sec"]
 		self.server_poll_period_sec = d["server_poll_period_sec"]

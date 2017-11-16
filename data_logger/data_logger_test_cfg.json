@@ -1,7 +1,7 @@
 {
 	"system_name":		"satelite42",
 	"server_addr":		"http://localhost:9000",
-	"server_login":		"gagarin",
+	"server_user":		"gagarin",
 	"server_password":	"soyuz",
 	"server_upload_period_sec":	1,
 	"server_poll_period_sec":	1,

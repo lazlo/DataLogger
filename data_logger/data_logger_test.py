@@ -3,6 +3,7 @@ import unittest
 import data_logger
 import config
 import data_store
+import data_server
 import data_input
 
 di_get_data_called = False
@@ -28,6 +29,9 @@ class DataLoggerTestCase(unittest.TestCase):
 
 	def testInit_dataStoreIsObject(self):
 		self.assertEqual(True, isinstance(self.dl.data_store, data_store.DataStore))
+
+	def testInit_serverIsDataServerObject(self):
+		self.assertEqual(True, isinstance(self.dl.data_server, data_server.DataServer))
 
 	def testInit_dataInputsIsPopulatedAccordingToConfig(self):
 		self.assertEqual(len(self.expectedCfg.data_inputs), len(self.dl.data_inputs))

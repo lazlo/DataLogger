@@ -1,4 +1,5 @@
 import data_store
+import data_server
 import data_input
 
 class DataLogger():
@@ -6,6 +7,7 @@ class DataLogger():
 	def __init__(self, config):
 		self.config = config
 		self.data_store = data_store.DataStore()
+		self.data_server = data_server.DataServer(self.config.server_addr, self.config.server_user, self.config.server_password)
 		self.data_inputs = []
 		self._populate_data_inputs()
 
