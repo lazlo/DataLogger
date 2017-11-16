@@ -13,4 +13,5 @@ class DataLogger():
 			self.data_inputs.append(di_obj)
 
 	def get_data(self):
-		self.data_inputs[0].get_data()
+		for di in self.data_inputs:
+			di.get_data()
