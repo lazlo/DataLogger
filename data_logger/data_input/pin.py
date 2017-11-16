@@ -1,4 +1,6 @@
 import data_input
 
 class Pin(data_input.DataInput):
-	pass
+
+	def get_data(self):
+		return False

@@ -12,5 +12,8 @@ class PinTestCase(unittest.TestCase):
 	def testIsSubclassOfDataInput(self):
 		self.assertEqual(True, issubclass(pin.Pin, data_input.DataInput))
 
+	def testGetData_returnsBoolean(self):
+		self.assertEqual(True, isinstance(self.p.get_data(), bool))
+
 if __name__ == "__main__":
 	unittest.main()
