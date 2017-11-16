@@ -1,4 +1,6 @@
 import data_input
 
 class Video(data_input.DataInput):
-	pass
+
+	def get_data(self):
+		return {}

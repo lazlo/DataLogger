@@ -11,3 +11,6 @@ class VideoTestCase(unittest.TestCase):
 
 	def testIsSubclassOfDataInput(self):
 		self.assertEqual(True, issubclass(video.Video, data_input.DataInput))
+
+	def testGetData_returnsDict(self):
+		self.assertEqual(True, isinstance(self.v.get_data(), dict))
