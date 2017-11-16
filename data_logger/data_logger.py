@@ -11,3 +11,6 @@ class DataLogger():
 			di_class = getattr(data_input, di_cfg["class"])
 			di_obj = di_class(di_cfg["name"])
 			self.data_inputs.append(di_obj)
+
+	def get_data(self):
+		self.data_inputs[0].get_data()

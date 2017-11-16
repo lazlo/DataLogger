@@ -5,6 +5,12 @@ import config
 import data_store
 import data_input
 
+di_get_data_called = False
+
+def fake_di_get_data():
+	global di_get_data_called
+	di_get_data_called = True
+
 class DataLoggerTestCase(unittest.TestCase):
 
 	def setUp(self):
@@ -37,6 +43,14 @@ class DataLoggerTestCase(unittest.TestCase):
 				ofExpectedType = False
 				break
 		self.assertEqual(True, ofExpectedType)
+
+	def testGetData_callsGetDataOnObjectsInDataInputsList(self):
+		global di_get_data_called
+		di_get_data_called = False
+		for di in self.dl.data_inputs:
+			di.get_data = fake_di_get_data
+		self.dl.get_data()
+		self.assertEqual(True, di_get_data_called)
 
 if __name__ == "__main__":
 	unittest.main()
