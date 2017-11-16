@@ -62,3 +62,10 @@ class Config():
 		for di in self.data_inputs:
 			if di["name"] == name:
 				return di
+
+	def get_data_inputs_by_class(self, class_name):
+		di_list = []
+		for di in self.data_inputs:
+			if di["class"] == class_name:
+				di_list.append(di)
+		return di_list

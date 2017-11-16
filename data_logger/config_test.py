@@ -76,5 +76,17 @@ class ConfigTestCase(unittest.TestCase):
 	def testGetDataInput_returnsNoneOnMismatch(self):
 		self.assertEqual(None, self.cfg.get_data_input("NameDoesNotExist"))
 
+	def testGetDataInputsByClass_returnsListOfObjRefsOnMatch(self):
+		expected = [
+			{"name": "Door 1 Status", "class": "Pin"},
+			{"name": "Door 2 Status", "class": "Pin"},
+		]
+		self.cfg.data_inputs = [
+			{"name": "Camera", "class": "Video"},
+			{"Name": "Position", "class": "Position"}
+		]
+		self.cfg.data_inputs.extend(expected)
+		self.assertEqual(expected, self.cfg.get_data_inputs_by_class("Pin"))
+
 if __name__ == "__main__":
 	unittest.main()
