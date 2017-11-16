@@ -23,6 +23,8 @@ class Config():
 		for di in self.data_inputs:
 			if not "name" in di.keys():
 				return False
+			if not di["name"]:
+				return False
 		return True
 
 	def load_file(self, cfgfile):
