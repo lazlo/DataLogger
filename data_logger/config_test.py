@@ -56,6 +56,10 @@ class ConfigTestCase(unittest.TestCase):
 		self.cfg.data_inputs = [{"name": "Ignition", "class": ""}]
 		self.assertEqual(False, self.cfg.is_valid())
 
+	def testIsValid_returnsFalseWhenDataInputElementClassHasNoMatchingClass(self):
+		self.cfg.data_inputs = [{"name": "Ignition", "class": "DoesNotExist"}]
+		self.assertEqual(False, self.cfg.is_valid())
+
 	def testIsValid_returnsTrueWhenAllRequiredFieldsAreNotEmpty(self):
 		self.assertEqual(True, self.cfg.is_valid())
 

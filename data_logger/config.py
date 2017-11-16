@@ -1,4 +1,5 @@
 import json
+import data_input
 
 class Config():
 
@@ -32,6 +33,10 @@ class Config():
 			if not "class" in di.keys():
 				return False
 			if not di["class"]:
+				return False
+			try:
+				getattr(data_input, di["class"])
+			except AttributeError:
 				return False
 		return True
 
