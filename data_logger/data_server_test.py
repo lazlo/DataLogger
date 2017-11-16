@@ -22,3 +22,6 @@ class DataServerTestCase(unittest.TestCase):
 
 	def testInit_httpConnIsInstanceOfHTTPConnection(self):
 		self.assertEqual(True, isinstance(self.srv.httpconn, httplib.HTTPConnection))
+
+	def testInit_httpConnHostIsSetToConfigValue(self):
+		self.assertEqual(self.expectedAddr, self.srv.httpconn.host)

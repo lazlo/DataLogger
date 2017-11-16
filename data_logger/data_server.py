@@ -6,4 +6,4 @@ class DataServer():
 		self.addr = addr
 		self.user = user
 		self.password = password
-		self.httpconn = httplib.HTTPConnection("localhost")
+		self.httpconn = httplib.HTTPConnection(self.addr)
