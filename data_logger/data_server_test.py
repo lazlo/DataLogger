@@ -6,7 +6,7 @@ import httplib
 class DataServerTestCase(unittest.TestCase):
 
 	def setUp(self):
-		self.expectedAddr = "http://localhost"
+		self.expectedAddr = "localhost"
 		self.expectedUser = "eris"
 		self.expectedPassword = "fnord2342"
 		self.srv = data_server.DataServer(self.expectedAddr, self.expectedUser, self.expectedPassword)

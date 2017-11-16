@@ -8,7 +8,7 @@ class ConfigTestCase(unittest.TestCase):
 	def setUp(self):
 		self.cfg = config.Config()
 		self.cfg.system_name = "cargoContainer-23"
-		self.cfg.server_addr = "http://localhost:8111"
+		self.cfg.server_addr = "localhost"
 		self.cfg.server_user = "eris"
 		self.cfg.server_password = "fnord2342"
 		self.cfg.server_upload_period_sec = 42
