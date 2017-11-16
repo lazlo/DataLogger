@@ -13,6 +13,11 @@ def fake_di_get_data():
 	di_get_data_called = True
 	di_get_data_called_ntimes += 1
 
+dl_get_data_called = False
+def fake_dl_get_data():
+	global dl_get_data_called
+	dl_get_data_called = True
+
 class DataLoggerTestCase(unittest.TestCase):
 
 	def setUp(self):
@@ -61,6 +66,13 @@ class DataLoggerTestCase(unittest.TestCase):
 			di.get_data = fake_di_get_data
 		self.dl.get_data()
 		self.assertEqual(len(self.dl.data_inputs), di_get_data_called_ntimes)
+
+	def testUpdate_callsGetData(self):
+		global dl_get_data_called
+		dl_get_data_called = False
+		self.dl.get_data = fake_dl_get_data
+		self.dl.update()
+		self.assertEqual(True, dl_get_data_called)
 
 if __name__ == "__main__":
 	unittest.main()

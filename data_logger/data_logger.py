@@ -18,3 +18,6 @@ class DataLogger():
 	def get_data(self):
 		for di in self.data_inputs:
 			di.get_data()
+
+	def update(self):
+		self.get_data()
