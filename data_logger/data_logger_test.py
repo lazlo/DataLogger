@@ -28,5 +28,15 @@ class DataLoggerTestCase(unittest.TestCase):
 				break
 		self.assertEqual(True, ofExpectedType)
 
+	def testInit_dataInputsElementsAreOfClassAccordingToConfig(self):
+		ofExpectedType = True
+		for obj in self.dl.data_inputs:
+			di_cfg = self.dl.config.get_data_input(obj.name)
+			expectedType = getattr(data_input, di_cfg["class"])
+			if not isinstance(obj, expectedType):
+				ofExpectedType = False
+				break
+		self.assertEqual(True, ofExpectedType)
+
 if __name__ == "__main__":
 	unittest.main()
