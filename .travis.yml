@@ -1,5 +1,5 @@
 language: python
 dist: trusty
 sudo: required
-install: sudo apt-get install -y python-gps
+install: sudo pip2 install gps3
 script: make
