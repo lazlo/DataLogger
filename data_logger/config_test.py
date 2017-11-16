@@ -70,5 +70,11 @@ class ConfigTestCase(unittest.TestCase):
 		c2.load_file(test_cfg_file)
 		self.assertEqual(c1, c2.__dict__)
 
+	def testGetDataInput_returnsObjRefOnMatch(self):
+		self.assertEqual(self.cfg.data_inputs[0], self.cfg.get_data_input("Door Status"))
+
+	def testGetDataInput_returnsNoneOnMismatch(self):
+		self.assertEqual(None, self.cfg.get_data_input("NameDoesNotExist"))
+
 if __name__ == "__main__":
 	unittest.main()

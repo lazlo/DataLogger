@@ -57,3 +57,8 @@ class Config():
 		self.server_login = d["server_login"]
 		self.server_password = d["server_password"]
 		self.data_inputs = d["data_inputs"]
+
+	def get_data_input(self, name):
+		for di in self.data_inputs:
+			if di["name"] == name:
+				return di
