@@ -1,5 +1,7 @@
 language: python
+python:
+ - "2.7"
 dist: trusty
 sudo: required
-install: sudo pip2 install gps3
+install: pip install gps3
 script: make
