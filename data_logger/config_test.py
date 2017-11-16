@@ -41,6 +41,13 @@ class ConfigTestCase(unittest.TestCase):
 		self.cfg.data_inputs = [{"name": ""}]
 		self.assertEqual(False, self.cfg.is_valid())
 
+	def testIsValid_returnsFalseWhenDataInputElementNameIsNotUnique(self):
+		self.cfg.data_inputs = [
+			{"name": "Door"},
+			{"name": "Door"}
+		]
+		self.assertEqual(False, self.cfg.is_valid())
+
 	def testIsValid_returnsTrueWhenAllRequiredFieldsAreNotEmpty(self):
 		self.assertEqual(True, self.cfg.is_valid())
 
