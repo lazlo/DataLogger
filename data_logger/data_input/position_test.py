@@ -2,12 +2,7 @@ import unittest
 
 import position
 import data_input
-import gps
-
-gps_next_called = False
-def fake_gps_next():
-	global gps_next_called
-	gps_next_called = True
+from gps3 import gps3
 
 class PositionTestCase(unittest.TestCase):
 
@@ -18,15 +13,11 @@ class PositionTestCase(unittest.TestCase):
 	def testIsSubclassOfDataInput(self):
 		self.assertEqual(True, issubclass(position.Position, data_input.DataInput))
 
-	def testInit_gpsFieldIsOfTypeGPS(self):
-		self.assertEqual(True, isinstance(self.pos._gps, gps.gps))
+	def testInit_gpsSockFieldIsOfTypeGPSDSocket(self):
+		self.assertEqual(True, isinstance(self.pos._gpsd_sock, gps3.GPSDSocket))
 
-	def testGetData_callsGPSNext(self):
-		global gps_next_called
-		gps_next_called = False
-		self.pos._gps.next = fake_gps_next
-		self.pos.get_data()
-		self.assertEqual(True, gps_next_called)
+	def testInit_gpsStreamFieldIsOfTypeDataStream(self):
+		self.assertEqual(True, isinstance(self.pos._gps_stream, gps3.DataStream))
 
 	def testGetData_returnsDictWithKeyLat(self):
 		self.assertEqual(True, "lat" in self.pos.get_data().keys())
