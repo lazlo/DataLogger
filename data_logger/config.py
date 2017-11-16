@@ -10,7 +10,7 @@ class Config():
 		self.server_password = None
 		self.data_inputs = None
 
-	def is_valid(self):
+	def _primary_required_fields_valid(self):
 		if not self.system_name:
 			return False
 		if not self.server_addr:
@@ -21,6 +21,9 @@ class Config():
 			return False
 		if not self.data_inputs:
 			return False
+		return True
+
+	def _data_inputs_valid(self):
 		data_input_names = []
 		for di in self.data_inputs:
 			if not "name" in di.keys():
@@ -38,6 +41,13 @@ class Config():
 				getattr(data_input, di["class"])
 			except AttributeError:
 				return False
+		return True
+
+	def is_valid(self):
+		if not self._primary_required_fields_valid():
+			return False
+		if not self._data_inputs_valid():
+			return False
 		return True
 
 	def load_file(self, cfgfile):
