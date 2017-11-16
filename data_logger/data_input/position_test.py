@@ -2,6 +2,7 @@ import unittest
 
 import position
 import data_input
+import gps
 
 class PositionTestCase(unittest.TestCase):
 
@@ -17,3 +18,6 @@ class PositionTestCase(unittest.TestCase):
 
 	def testGetData_returnsDictWithKeyLon(self):
 		self.assertEqual(True, "lon" in self.pos.get_data().keys())
+
+	def testInit_gpsFieldIsOfTypeGPS(self):
+		self.assertEqual(True, isinstance(self.pos._gps, gps.gps))
