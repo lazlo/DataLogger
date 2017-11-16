@@ -29,6 +29,8 @@ class Config():
 			if di["name"] in data_input_names:
 				return False
 			data_input_names.append(di["name"])
+			if not "class" in di.keys():
+				return False
 		return True
 
 	def load_file(self, cfgfile):

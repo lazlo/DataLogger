@@ -4,16 +4,16 @@
 	"server_login":		"gagarin",
 	"server_password":	"soyuz",
 	"data_inputs":		[
-		{"name": "Hatch 1 Lock"},
-		{"name": "Hatch 2 Lock"},
-		{"name": "Ignition"},
-		{"name": "Position"},
-		{"name": "Acceleration"},
-		{"name": "Temperature Room 1"},
-		{"name": "Temperature Room 2"},
-		{"name": "Temperature Room 3"},
-		{"name": "Temperature Room 4"},
-		{"name": "Camera Room 1"},
-		{"name": "Camera Room 2"}
+		{"name": "Hatch 1 Lock",	"class": "Pin"},
+		{"name": "Hatch 2 Lock",	"class": "Pin"},
+		{"name": "Ignition",		"class": "Pin"},
+		{"name": "Position",		"class": "Position"},
+		{"name": "Acceleration",	"class": "Sensor"},
+		{"name": "Temperature Room 1",	"class": "Sensor"},
+		{"name": "Temperature Room 2",	"class": "Sensor"},
+		{"name": "Temperature Room 3",	"class": "Sensor"},
+		{"name": "Temperature Room 4",	"class": "Sensor"},
+		{"name": "Camera Room 1",	"class": "Video"},
+		{"name": "Camera Room 2",	"class": "Video"}
 	]
 }
