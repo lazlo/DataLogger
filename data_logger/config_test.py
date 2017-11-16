@@ -11,7 +11,7 @@ class ConfigTestCase(unittest.TestCase):
 		self.cfg.server_addr = "http://localhost:8111"
 		self.cfg.server_login = "eris"
 		self.cfg.server_password = "fnord2342"
-		self.cfg.data_inputs = [{"name": "Door Status", "class": ""}]
+		self.cfg.data_inputs = [{"name": "Door Status", "class": "Pin"}]
 
 	def testIsValid_returnsFalseWhenSystemNameIsEmpty(self):
 		self.cfg.system_name = None
@@ -50,6 +50,10 @@ class ConfigTestCase(unittest.TestCase):
 
 	def testIsValid_returnsFalseWhenDataInputElementClassKeyMissing(self):
 		self.cfg.data_inputs = [{"name": "Ignition"}]
+		self.assertEqual(False, self.cfg.is_valid())
+
+	def testIsValid_returnsFalseWhenDataInputElementClassIsEmpty(self):
+		self.cfg.data_inputs = [{"name": "Ignition", "class": ""}]
 		self.assertEqual(False, self.cfg.is_valid())
 
 	def testIsValid_returnsTrueWhenAllRequiredFieldsAreNotEmpty(self):
