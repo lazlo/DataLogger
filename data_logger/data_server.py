@@ -12,5 +12,5 @@ class DataServer():
 		method = "POST"
 		url = ""
 		body = None
-		headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+		headers = {"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}
 		self.httpconn.request(method, url, body, headers)

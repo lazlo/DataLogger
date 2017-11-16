@@ -52,9 +52,9 @@ class DataServerTestCase(unittest.TestCase):
 		self.srv.upload()
 		self.assertEqual("POST", httpconn_request_arg_method)
 
-	def testUpload_callsHttpConnRequestWithFourthArgumentHeadersContentTypeXWwwFormUrlEncodedAcceptTextPlain(self):
+	def testUpload_callsHttpConnRequestWithFourthArgumentHeadersContentTypeApplicationJSONCharsetUTF8AcceptApplicationJSON(self):
 		global httpconn_request_arg_headers
 		httpconn_request_arg_headers = None
 		self.srv.httpconn.request = fake_httpconn_request
 		self.srv.upload()
-		self.assertEqual({"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}, httpconn_request_arg_headers)
+		self.assertEqual({"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}, httpconn_request_arg_headers)
