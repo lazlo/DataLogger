@@ -64,7 +64,7 @@ class DataServerTestCase(unittest.TestCase):
 		self.srv.upload(self.requestBody)
 		self.assertEqual(self.requestMethod, httpconn_request_arg_method)
 
-	def testUpload_callsHttpConnRequestWithSecondArgumentBodyUrlEncoded(self):
+	def testUpload_callsHttpConnRequestWithThirdArgumentBodyUrlEncoded(self):
 		global httpconn_request_arg_body
 		httpconn_request_arg_body = None
 		expected_body = urllib.urlencode(self.requestBody)
