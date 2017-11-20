@@ -30,7 +30,7 @@ class DataLogger():
 			di = self._get_data_input(di_name)
 			data = di.get_data()
 			rec.measurements.append(data)
-		self.data_store.save(rec)
+		self.data_store.save(rec.__dict__)
 
 	def update(self):
 		self.get_data()

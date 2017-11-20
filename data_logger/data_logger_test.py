@@ -102,7 +102,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		data input, for now we start by only checking the number of entries in the measurments
 		list of the data record is correct.
 		"""
-		self.assertEqual(len(self.expectedCfg.data_record_format), len(st_save_arg_line.measurements))
+		self.assertEqual(len(self.expectedCfg.data_record_format), len(st_save_arg_line["measurements"]))
 
 	def testGetData_callsDataStoreSave(self):
 		global st_save_called
@@ -111,12 +111,15 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.get_data()
 		self.assertEqual(True, st_save_called)
 
-	def testGetData_callsDataStoreSaveWithDataRecordAsArgument(self):
+	def testGetData_callsDataStoreSaveWithDataRecordDictAsArgument(self):
+		"""
+		NOTE We only check that the type of argument is a dict, not its contents.
+		"""
 		global st_save_arg_line
 		st_save_arg_line = None
 		self.dl.data_store.save = fake_st_save
 		self.dl.get_data()
-		self.assertEqual(True, isinstance(st_save_arg_line, data_record.DataRecord))
+		self.assertEqual(True, isinstance(st_save_arg_line, dict))
 
 	def testUpdate_callsGetData(self):
 		global dl_get_data_called
