@@ -18,4 +18,8 @@ class DataServer():
 		url = self.path
 		body = urllib.urlencode(body)
 		headers = {"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}
-		self.httpconn.request(method, url, body, headers)
+		try:
+			self.httpconn.request(method, url, body, headers)
+		except:
+			return False
+		return True

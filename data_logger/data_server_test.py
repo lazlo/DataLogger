@@ -22,6 +22,9 @@ def fake_httpconn_request(method, url, body=None, headers=None):
 	httpconn_request_arg_body = body
 	httpconn_request_arg_headers = headers
 
+def fake_exploding_httpconn_request(method, url, body=None, headers=None):
+	raise Exception()
+
 class DataServerTestCase(unittest.TestCase):
 
 	def setUp(self):
@@ -89,3 +92,13 @@ class DataServerTestCase(unittest.TestCase):
 		self.srv.httpconn.request = fake_httpconn_request
 		self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(self.expectedRequestHeaders, httpconn_request_arg_headers)
+
+	def testUpload_returnsTrue(self):
+		self.srv.httpconn.request = fake_httpconn_request
+		rv = self.srv.upload(self.expectedRequestBody)
+		self.assertEqual(True, rv)
+
+	def testUpload_returnsFalseOnException(self):
+		self.srv.httpconn.request = fake_exploding_httpconn_request
+		rv = self.srv.upload(self.expectedRequestBody)
+		self.assertEqual(False, rv)
