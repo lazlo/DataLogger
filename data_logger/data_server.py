@@ -21,6 +21,7 @@ class DataServer():
 		headers = {"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}
 		try:
 			self.httpconn.request(method, url, body, headers)
-		except:
+		except Exception as ex:
+			self.error = ex.message
 			return False
 		return True

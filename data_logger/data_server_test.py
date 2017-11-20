@@ -22,8 +22,9 @@ def fake_httpconn_request(method, url, body=None, headers=None):
 	httpconn_request_arg_body = body
 	httpconn_request_arg_headers = headers
 
+exploding_httpconn_errmsg = None
 def fake_exploding_httpconn_request(method, url, body=None, headers=None):
-	raise Exception()
+	raise Exception(exploding_httpconn_errmsg)
 
 class DataServerTestCase(unittest.TestCase):
 
@@ -105,3 +106,10 @@ class DataServerTestCase(unittest.TestCase):
 		self.srv.httpconn.request = fake_exploding_httpconn_request
 		rv = self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(False, rv)
+
+	def testUpload_setsErrorOnException(self):
+		global exploding_httpconn_errmsg
+		exploding_httpconn_errmsg = "Connection refused"
+		self.srv.httpconn.request = fake_exploding_httpconn_request
+		self.srv.upload(self.expectedRequestBody)
+		self.assertEqual(exploding_httpconn_errmsg, self.srv.error)
