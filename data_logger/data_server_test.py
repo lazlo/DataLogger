@@ -113,3 +113,15 @@ class DataServerTestCase(unittest.TestCase):
 		self.srv.httpconn.request = fake_exploding_httpconn_request
 		self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(exploding_httpconn_errmsg, self.srv.error)
+
+	def testUpload_setsErrorToNoneOnSuccess(self):
+		global exploding_httpconn_errmsg
+		exploding_httpconn_errmsg = "Forbidden"
+		self.srv.httpconn.request = fake_exploding_httpconn_request
+		self.srv.upload(self.expectedRequestBody)
+		# as this point self.srv.error should be set
+		self.assertEqual(exploding_httpconn_errmsg, self.srv.error)
+		# now do a successful request
+		self.srv.httpconn.request = fake_httpconn_request
+		self.srv.upload(self.expectedRequestBody)
+		self.assertEqual(None, self.srv.error)

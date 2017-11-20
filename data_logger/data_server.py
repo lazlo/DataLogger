@@ -24,4 +24,5 @@ class DataServer():
 		except Exception as ex:
 			self.error = ex.message
 			return False
+		self.error = None
 		return True
