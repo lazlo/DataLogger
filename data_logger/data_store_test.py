@@ -59,3 +59,12 @@ class DataStoreTestCase(unittest.TestCase):
 			self.assertEqual(3, self.ds.records())
 		finally:
 			os.remove(self.expectedFile)
+
+	def testReadOldest_returnsFirstLine(self):
+		self.ds.save("first-line")
+		self.ds.save("second-line")
+		self.ds.save("third-line")
+		try:
+			self.assertEqual("first-line", self.ds.read_oldest())
+		finally:
+			os.remove(self.expectedFile)

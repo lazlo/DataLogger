@@ -17,3 +17,6 @@ class DataStore():
 
 	def records(self):
 		return len(open(self.recordFile).readlines())
+
+	def read_oldest(self):
+		return open(self.recordFile).readline().rstrip()
