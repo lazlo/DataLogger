@@ -4,10 +4,10 @@ import urllib
 class DataServer():
 
 	def __init__(self, addr, user, password):
-		self.addr = addr
+		self.host = addr.split("/")[0]
 		self.user = user
 		self.password = password
-		self.httpconn = httplib.HTTPConnection(self.addr)
+		self.httpconn = httplib.HTTPConnection(self.host)
 
 	def upload(self, body):
 		method = "POST"

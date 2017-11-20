@@ -22,7 +22,8 @@ def fake_httpconn_request(method, url, body=None, headers=None):
 class DataServerTestCase(unittest.TestCase):
 
 	def setUp(self):
-		self.expectedAddr = "localhost"
+		self.expectedHost = "192.168.0.1"
+		self.expectedAddr = "%s/db/req/type/json/store" % self.expectedHost
 		self.expectedUser = "eris"
 		self.expectedPassword = "fnord2342"
 		self.requestMethod = "POST"
@@ -30,8 +31,8 @@ class DataServerTestCase(unittest.TestCase):
 		self.requestHeaders = {"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}
 		self.srv = data_server.DataServer(self.expectedAddr, self.expectedUser, self.expectedPassword)
 
-	def testInit_addrIsSet(self):
-		self.assertEqual(self.expectedAddr, self.srv.addr)
+	def testInit_addrIsSetToHost(self):
+		self.assertEqual(self.expectedHost, self.srv.host)
 
 	def testInit_userIsSet(self):
 		self.assertEqual(self.expectedUser, self.srv.user)
@@ -42,8 +43,8 @@ class DataServerTestCase(unittest.TestCase):
 	def testInit_httpConnIsInstanceOfHTTPConnection(self):
 		self.assertEqual(True, isinstance(self.srv.httpconn, httplib.HTTPConnection))
 
-	def testInit_httpConnHostIsSetToConfigValue(self):
-		self.assertEqual(self.expectedAddr, self.srv.httpconn.host)
+	def testInit_httpConnHostIsSetToHostPartOfAddressConfigValue(self):
+		self.assertEqual(self.expectedHost, self.srv.httpconn.host)
 
 	def testUpload_callsHttpConnRequest(self):
 		global httpconn_request_called
