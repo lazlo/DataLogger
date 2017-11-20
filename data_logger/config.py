@@ -73,6 +73,12 @@ class Config():
 		self.data_inputs = d["data_inputs"]
 		self.data_record_format = d["data_record_format"]
 
+	def data_input_exists(self, name):
+		for di in self.data_inputs:
+			if di["name"] == name:
+				return True
+		return False
+
 	def get_data_input(self, name):
 		for di in self.data_inputs:
 			if di["name"] == name:

@@ -85,6 +85,12 @@ class ConfigTestCase(unittest.TestCase):
 		c2.load_file(test_cfg_file)
 		self.assertEqual(c1, c2.__dict__)
 
+	def testDataInputExists_returnsTrueOnMatch(self):
+		self.assertEqual(True, self.cfg.data_input_exists("Door Status"))
+
+	def testDataInputExists_returnsFalseOnMismatch(self):
+		self.assertEqual(False, self.cfg.data_input_exists("Exit Door Status"))
+
 	def testGetDataInput_returnsObjRefOnMatch(self):
 		self.assertEqual(self.cfg.data_inputs[0], self.cfg.get_data_input("Door Status"))
 
