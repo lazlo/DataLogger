@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 #
 # System to monitor
 #  - position (via GPS)
