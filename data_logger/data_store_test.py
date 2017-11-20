@@ -7,6 +7,7 @@ class DataStoreTestCase(unittest.TestCase):
 
 	def setUp(self):
 		self.expectedDataDir = "test-datadir"
+		self.expectedFile = os.path.join(self.expectedDataDir, "foo.txt")
 		os.mkdir(self.expectedDataDir)
 		self.ds = data_store.DataStore(self.expectedDataDir)
 
@@ -21,7 +22,14 @@ class DataStoreTestCase(unittest.TestCase):
 		self.assertEqual(data_store.DataStore.DEFAULT_DATA_DIR, s.data_dir)
 
 	def testSave_createsFileInDataDir(self):
-		expectedFile = os.path.join(self.expectedDataDir, "foo.txt")
 		self.ds.save()
-		self.assertEqual(True, os.path.exists(expectedFile))
-		os.remove(expectedFile)
+		self.assertEqual(True, os.path.exists(self.expectedFile))
+		os.remove(self.expectedFile)
+
+	def testSave_appendsToFileInDataDir(self):
+		self.ds.save() # create file with one line
+		self.ds.save() # append to file
+		try:
+			self.assertEqual(2, len(open(self.expectedFile).readlines()))
+		finally:
+			os.remove(self.expectedFile)

@@ -11,6 +11,6 @@ class DataStore():
 
 	def save(self):
 		recordFile = os.path.join(self.data_dir, "foo.txt")
-		f = open(recordFile, "w")
-		f.write("foobar")
+		f = open(recordFile, "a")
+		f.write("foobar\n")
 		f.close()
