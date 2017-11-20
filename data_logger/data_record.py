@@ -7,6 +7,9 @@
 #         }
 #     ]
 # }
+import time
 
 class DataRecord():
-	pass
+
+	def __init__(self):
+		self.timestamp = time.strftime("%Y-%m-%dT%H:%M:%S")
