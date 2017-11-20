@@ -15,14 +15,18 @@ class DataStoreTestCase(unittest.TestCase):
 		os.rmdir(self.expectedDataDir)
 
 	def testInit_raisesExceptionWhenDataDirDoesNotExist(self):
-		with self.assertRaises(IOError):
-			data_store.DataStore("/some/dir/that/does/not/exist")
+		expectedDir = "/some/dir/that/does/not/exist"
+		with self.assertRaises(IOError) as ex:
+			data_store.DataStore(expectedDir)
+		self.assertEqual("No such file or directory \"%s\"" % expectedDir, ex.exception.message)
 
 	def testInit_raiseExceptionWhenDataDirIsNotWritable(self):
-		with self.assertRaises(IOError):
+		expectedDir = "/root"
+		with self.assertRaises(IOError) as ex:
 			# NOTE The test should never be run as root in the first
 			# place. Otherwise this test will fail.
-			data_store.DataStore("/root")
+			data_store.DataStore(expectedDir)
+		self.assertEqual("Permission denied \"%s\"" % expectedDir, ex.exception.message)
 
 	def testInit_dataDirIsSet(self):
 		self.assertEqual(self.expectedDataDir, self.ds.data_dir)
