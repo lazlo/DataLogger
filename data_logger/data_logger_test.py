@@ -19,6 +19,11 @@ def fake_dl_get_data():
 	global dl_get_data_called
 	dl_get_data_called = True
 
+ds_upload_called = False
+def fake_ds_upload(body):
+	global ds_upload_called
+	ds_upload_called = True
+
 class DataLoggerTestCase(unittest.TestCase):
 
 	def setUp(self):
@@ -77,6 +82,13 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.get_data = fake_dl_get_data
 		self.dl.update()
 		self.assertEqual(True, dl_get_data_called)
+
+	def testUpdate_callsDataServerUpload(self):
+		global ds_upload_called
+		ds_upload_called = False
+		self.dl.data_server.upload = fake_ds_upload
+		self.dl.update()
+		self.assertEqual(True, ds_upload_called)
 
 if __name__ == "__main__":
 	unittest.main()

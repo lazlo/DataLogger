@@ -23,3 +23,5 @@ class DataLogger():
 
 	def update(self):
 		self.get_data()
+		body = {}
+		self.data_server.upload(body)
