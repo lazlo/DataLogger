@@ -18,5 +18,15 @@
 		{"name": "Temperature Room 4",	"class": "Temperature"},
 		{"name": "Camera Room 1",	"class": "Video"},
 		{"name": "Camera Room 2",	"class": "Video"}
+	],
+	"data_record_format":	[
+		"Ignition",
+		"Hatch 1 Lock",
+		"Hatch 2 Lock",
+		"Temperature Room 1",
+		"Temperature Room 2",
+		"Temperature Room 3",
+		"Temperature Room 4",
+		"Position"
 	]
 }

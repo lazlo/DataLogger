@@ -12,6 +12,7 @@ class Config():
 		self.server_poll_period_sec = None
 		self.data_dir = None
 		self.data_inputs = None
+		self.data_record_format = None
 
 	def _primary_required_fields_valid(self):
 		if not self.system_name:
@@ -27,6 +28,8 @@ class Config():
 		if not self.server_poll_period_sec:
 			return False
 		if not self.data_inputs:
+			return False
+		if not self.data_record_format:
 			return False
 		return True
 
@@ -68,6 +71,7 @@ class Config():
 		if "data_dir" in d.keys():
 			self.data_dir = d["data_dir"]
 		self.data_inputs = d["data_inputs"]
+		self.data_record_format = d["data_record_format"]
 
 	def get_data_input(self, name):
 		for di in self.data_inputs:
