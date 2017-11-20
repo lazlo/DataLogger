@@ -1,3 +1,5 @@
+import os
+
 class DataStore():
 
 	DEFAULT_DATA_DIR = "/var/lib/data-logger"
@@ -8,4 +10,7 @@ class DataStore():
 			self.data_dir = data_dir
 
 	def save(self):
-		return
+		recordFile = os.path.join(self.data_dir, "foo.txt")
+		f = open(recordFile, "w")
+		f.write("foobar")
+		f.close()

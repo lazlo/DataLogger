@@ -73,6 +73,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		di_get_data_called = False
 		for di in self.dl.data_inputs:
 			di.get_data = fake_di_get_data
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.get_data()
 		self.assertEqual(True, di_get_data_called)
 
@@ -81,6 +82,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		di_get_data_called_ntimes = 0
 		for di in self.dl.data_inputs:
 			di.get_data = fake_di_get_data
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.get_data()
 		self.assertEqual(len(self.dl.data_inputs), di_get_data_called_ntimes)
 
@@ -95,6 +97,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		global dl_get_data_called
 		dl_get_data_called = False
 		self.dl.get_data = fake_dl_get_data
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(True, dl_get_data_called)
 
@@ -102,6 +105,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		global ds_upload_called
 		ds_upload_called = False
 		self.dl.data_server.upload = fake_ds_upload
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(True, ds_upload_called)
 
