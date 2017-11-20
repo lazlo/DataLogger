@@ -31,9 +31,9 @@ class DataServerTestCase(unittest.TestCase):
 		self.expectedAddr = "http://%s:%d%s" % (self.expectedHost, self.expectedPort, self.expectedUrl)
 		self.expectedUser = "eris"
 		self.expectedPassword = "fnord2342"
-		self.requestMethod = "POST"
-		self.requestBody = {"@station": 1234, "@type": "foo"}
-		self.requestHeaders = {"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}
+		self.expectedRequestMethod = "POST"
+		self.expectedRequestBody = {"@station": 1234, "@type": "foo"}
+		self.expectedRequestHeaders = {"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}
 		self.srv = data_server.DataServer(self.expectedAddr, self.expectedUser, self.expectedPassword)
 
 	def testInit_addrIsSetToHost(self):
@@ -58,34 +58,34 @@ class DataServerTestCase(unittest.TestCase):
 		global httpconn_request_called
 		httpconn_request_called = False
 		self.srv.httpconn.request = fake_httpconn_request
-		self.srv.upload(self.requestBody)
+		self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(True, httpconn_request_called)
 
 	def testUpload_callsHttpConnRequestWithFirstArgumentMethodPost(self):
 		global httpconn_request_arg_method
 		httpconn_request_arg_method = None
 		self.srv.httpconn.request = fake_httpconn_request
-		self.srv.upload(self.requestBody)
-		self.assertEqual(self.requestMethod, httpconn_request_arg_method)
+		self.srv.upload(self.expectedRequestBody)
+		self.assertEqual(self.expectedRequestMethod, httpconn_request_arg_method)
 
 	def testUpload_callsHttpConnRequestWithSecondArgumentUrl(self):
 		global httpconn_request_arg_url
 		httpconn_request_arg_url = None
 		self.srv.httpconn.request = fake_httpconn_request
-		self.srv.upload(self.requestBody)
+		self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(self.expectedUrl, httpconn_request_arg_url)
 
 	def testUpload_callsHttpConnRequestWithThirdArgumentBodyUrlEncoded(self):
 		global httpconn_request_arg_body
 		httpconn_request_arg_body = None
-		expected_body = urllib.urlencode(self.requestBody)
+		expected_body = urllib.urlencode(self.expectedRequestBody)
 		self.srv.httpconn.request = fake_httpconn_request
-		self.srv.upload(self.requestBody)
+		self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(expected_body, httpconn_request_arg_body)
 
 	def testUpload_callsHttpConnRequestWithFourthArgumentHeadersContentTypeApplicationJSONCharsetUTF8AcceptApplicationJSON(self):
 		global httpconn_request_arg_headers
 		httpconn_request_arg_headers = None
 		self.srv.httpconn.request = fake_httpconn_request
-		self.srv.upload(self.requestBody)
-		self.assertEqual(self.requestHeaders, httpconn_request_arg_headers)
+		self.srv.upload(self.expectedRequestBody)
+		self.assertEqual(self.expectedRequestHeaders, httpconn_request_arg_headers)
