@@ -19,6 +19,7 @@ class DataServer():
 	def upload(self, body):
 		try:
 			self.httpconn.request(self.req_method, self.path, urllib.urlencode(body), self.req_headers)
+			# FIXME get response (via self.httpconn.getresponse()) and check .status and .reason
 		except Exception as ex:
 			self.error = ex.message
 			return False
