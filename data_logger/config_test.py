@@ -75,6 +75,10 @@ class ConfigTestCase(unittest.TestCase):
 		self.cfg.data_record_format = None
 		self.assertEqual(False, self.cfg.is_valid())
 
+	def testIsValid_returnsFalseWhenDataRecordValueDoesNotAppearInDataInputs(self):
+		self.cfg.data_record_format = ["Door 128"]
+		self.assertEqual(False, self.cfg.is_valid())
+
 	def testIsValid_returnsTrueWhenAllRequiredFieldsAreNotEmpty(self):
 		self.assertEqual(True, self.cfg.is_valid())
 

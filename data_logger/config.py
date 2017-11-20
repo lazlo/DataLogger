@@ -53,10 +53,18 @@ class Config():
 				return False
 		return True
 
+	def _data_record_format_valid(self):
+		for di_name in self.data_record_format:
+			if not self.data_input_exists(di_name):
+				return False
+		return True
+
 	def is_valid(self):
 		if not self._primary_required_fields_valid():
 			return False
 		if not self._data_inputs_valid():
+			return False
+		if not self._data_record_format_valid():
 			return False
 		return True
 
