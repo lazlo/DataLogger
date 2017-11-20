@@ -1,4 +1,5 @@
 import httplib
+import urllib
 
 class DataServer():
 
@@ -8,9 +9,9 @@ class DataServer():
 		self.password = password
 		self.httpconn = httplib.HTTPConnection(self.addr)
 
-	def upload(self):
+	def upload(self, body):
 		method = "POST"
 		url = ""
-		body = None
+		body = urllib.urlencode(body)
 		headers = {"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}
 		self.httpconn.request(method, url, body, headers)
