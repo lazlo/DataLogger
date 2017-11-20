@@ -28,7 +28,8 @@ class DataLogger():
 		rec = data_record.DataRecord()
 		for di_name in self.config.data_record_format:
 			di = self._get_data_input(di_name)
-			di.get_data()
+			data = di.get_data()
+			rec.measurements.append(data)
 		self.data_store.save(rec)
 
 	def update(self):
