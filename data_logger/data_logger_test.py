@@ -86,14 +86,14 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.get_data()
 		self.assertEqual(True, di_get_data_called)
 
-	def testGetData_callsGetDataOnAllObjectsInDataInputList(self):
+	def testGetData_callsGetDataOnObjectsInDataInputListOnlyListedInDataRecordFormat(self):
 		global di_get_data_called_ntimes
 		di_get_data_called_ntimes = 0
 		for di in self.dl.data_inputs:
 			di.get_data = fake_di_get_data
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.get_data()
-		self.assertEqual(len(self.dl.data_inputs), di_get_data_called_ntimes)
+		self.assertEqual(len(self.dl.config.data_record_format), di_get_data_called_ntimes)
 
 	def testGetData_callsDataStoreSave(self):
 		global st_save_called

@@ -18,9 +18,16 @@ class DataLogger():
 			di_obj = di_class(di_cfg["name"])
 			self.data_inputs.append(di_obj)
 
+	def _get_data_input(self, name):
+		for di in self.data_inputs:
+			if di.name != name:
+				continue
+			return di
+
 	def get_data(self):
 		rec = data_record.DataRecord()
-		for di in self.data_inputs:
+		for di_name in self.config.data_record_format:
+			di = self._get_data_input(di_name)
 			di.get_data()
 		self.data_store.save(rec)
 
