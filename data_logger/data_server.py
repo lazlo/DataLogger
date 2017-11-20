@@ -12,6 +12,7 @@ class DataServer():
 		self.user = user
 		self.password = password
 		self.httpconn = httplib.HTTPConnection(self.host, self.port)
+		self.error = None
 
 	def upload(self, body):
 		method = "POST"

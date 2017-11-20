@@ -57,6 +57,9 @@ class DataServerTestCase(unittest.TestCase):
 	def testInit_httpConnPortIsSetToPortPartOfAddressConfigValue(self):
 		self.assertEqual(self.expectedPort, self.srv.httpconn.port)
 
+	def testInit_errorIsNone(self):
+		self.assertEqual(None, self.srv.error)
+
 	def testUpload_callsHttpConnRequest(self):
 		global httpconn_request_called
 		httpconn_request_called = False
