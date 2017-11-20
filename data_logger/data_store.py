@@ -20,3 +20,12 @@ class DataStore():
 
 	def read_oldest(self):
 		return open(self.recordFile).readline().rstrip()
+
+	def drop_oldest(self):
+		f = open(self.recordFile)
+		lines = f.readlines()
+		f.close()
+		f = open(self.recordFile, "w")
+		for line in lines[1:]:
+			f.write(line)
+		f.close()
