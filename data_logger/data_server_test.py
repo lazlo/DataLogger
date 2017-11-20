@@ -25,7 +25,9 @@ class DataServerTestCase(unittest.TestCase):
 		self.expectedAddr = "localhost"
 		self.expectedUser = "eris"
 		self.expectedPassword = "fnord2342"
+		self.requestMethod = "POST"
 		self.requestBody = {"@station": 1234, "@type": "foo"}
+		self.requestHeaders = {"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}
 		self.srv = data_server.DataServer(self.expectedAddr, self.expectedUser, self.expectedPassword)
 
 	def testInit_addrIsSet(self):
@@ -55,7 +57,7 @@ class DataServerTestCase(unittest.TestCase):
 		httpconn_request_arg_method = None
 		self.srv.httpconn.request = fake_httpconn_request
 		self.srv.upload(self.requestBody)
-		self.assertEqual("POST", httpconn_request_arg_method)
+		self.assertEqual(self.requestMethod, httpconn_request_arg_method)
 
 	def testUpload_callsHttpConnRequestWithSecondArgumentBodyUrlEncoded(self):
 		global httpconn_request_arg_body
@@ -70,4 +72,4 @@ class DataServerTestCase(unittest.TestCase):
 		httpconn_request_arg_headers = None
 		self.srv.httpconn.request = fake_httpconn_request
 		self.srv.upload(self.requestBody)
-		self.assertEqual({"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}, httpconn_request_arg_headers)
+		self.assertEqual(self.requestHeaders, httpconn_request_arg_headers)
