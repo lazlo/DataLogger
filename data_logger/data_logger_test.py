@@ -36,7 +36,7 @@ def fake_ds_upload(body):
 class DataLoggerTestCase(unittest.TestCase):
 
 	def setUp(self):
-		self.expectedCfgFile = "data_logger_test_cfg.json"
+		self.expectedCfgFile = "../example/data_logger_test_cfg.json"
 		self.expectedCfg = config.Config()
 		self.expectedCfg.load_file(self.expectedCfgFile)
 		self.dl = data_logger.DataLogger(self.expectedCfg)
