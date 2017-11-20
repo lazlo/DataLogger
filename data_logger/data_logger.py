@@ -18,10 +18,14 @@ class DataLogger():
 			self.data_inputs.append(di_obj)
 
 	def get_data(self):
+		# FIXME create a data_record object for each call
 		for di in self.data_inputs:
 			di.get_data()
+		# FIXME pass data_record to data_store
 
 	def update(self):
 		self.get_data()
 		body = {}
 		self.data_server.upload(body)
+		# FIXME check return value of upload
+		# FIXME on success, delete serialized version of data_record from data_store
