@@ -1,13 +1,17 @@
 import httplib
 import urllib
+import urlparse
 
 class DataServer():
 
 	def __init__(self, addr, user, password):
-		self.host = addr.split("/")[0]
+		url = urlparse.urlparse(addr)
+
+		self.host = url.hostname
+		self.port = url.port
 		self.user = user
 		self.password = password
-		self.httpconn = httplib.HTTPConnection(self.host)
+		self.httpconn = httplib.HTTPConnection(self.host, self.port)
 
 	def upload(self, body):
 		method = "POST"

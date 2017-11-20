@@ -23,7 +23,8 @@ class DataServerTestCase(unittest.TestCase):
 
 	def setUp(self):
 		self.expectedHost = "192.168.0.1"
-		self.expectedAddr = "%s/db/req/type/json/store" % self.expectedHost
+		self.expectedPort = 8081
+		self.expectedAddr = "http://%s:%d/db/req/type/json/store" % (self.expectedHost, self.expectedPort)
 		self.expectedUser = "eris"
 		self.expectedPassword = "fnord2342"
 		self.requestMethod = "POST"
@@ -45,6 +46,9 @@ class DataServerTestCase(unittest.TestCase):
 
 	def testInit_httpConnHostIsSetToHostPartOfAddressConfigValue(self):
 		self.assertEqual(self.expectedHost, self.srv.httpconn.host)
+
+	def testInit_httpConnPortIsSetToPortPartOfAddressConfigValue(self):
+		self.assertEqual(self.expectedPort, self.srv.httpconn.port)
 
 	def testUpload_callsHttpConnRequest(self):
 		global httpconn_request_called

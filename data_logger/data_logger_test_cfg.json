@@ -1,6 +1,6 @@
 {
 	"system_name":		"satelite42",
-	"server_addr":		"localhost",
+	"server_addr":		"http://localhost:3000/db/23/req/insert",
 	"server_user":		"gagarin",
 	"server_password":	"soyuz",
 	"server_upload_period_sec":	1,
