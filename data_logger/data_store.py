@@ -6,3 +6,6 @@ class DataStore():
 		self.data_dir = self.DEFAULT_DATA_DIR
 		if data_dir:
 			self.data_dir = data_dir
+
+	def save(self):
+		return

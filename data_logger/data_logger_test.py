@@ -19,6 +19,11 @@ def fake_dl_get_data():
 	global dl_get_data_called
 	dl_get_data_called = True
 
+st_save_called = False
+def fake_st_save():
+	global st_save_called
+	st_save_called = True
+
 ds_upload_called = False
 def fake_ds_upload(body):
 	global ds_upload_called
@@ -75,6 +80,13 @@ class DataLoggerTestCase(unittest.TestCase):
 			di.get_data = fake_di_get_data
 		self.dl.get_data()
 		self.assertEqual(len(self.dl.data_inputs), di_get_data_called_ntimes)
+
+	def testGetData_callsDataStoreSave(self):
+		global st_save_called
+		st_save_called = False
+		self.dl.data_store.save = fake_st_save
+		self.dl.get_data()
+		self.assertEqual(True, st_save_called)
 
 	def testUpdate_callsGetData(self):
 		global dl_get_data_called

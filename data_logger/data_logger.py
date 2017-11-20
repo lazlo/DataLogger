@@ -22,6 +22,7 @@ class DataLogger():
 		for di in self.data_inputs:
 			di.get_data()
 		# FIXME pass data_record to data_store
+		self.data_store.save()
 
 	def update(self):
 		self.get_data()
