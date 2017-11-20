@@ -40,6 +40,9 @@ class DataLoggerTestCase(unittest.TestCase):
 	def testInit_dataStoreIsObject(self):
 		self.assertEqual(True, isinstance(self.dl.data_store, data_store.DataStore))
 
+	def testInit_dataStoreDataDirIsSetToConfigValue(self):
+		self.assertEqual(self.expectedCfg.data_dir, self.dl.data_store.data_dir)
+
 	def testInit_serverIsDataServerObject(self):
 		self.assertEqual(True, isinstance(self.dl.data_server, data_server.DataServer))
 
