@@ -15,11 +15,11 @@ class DataStoreTestCase(unittest.TestCase):
 		os.rmdir(self.expectedDataDir)
 
 	def testInit_raisesExceptionWhenDataDirDoesNotExist(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(IOError):
 			data_store.DataStore("/some/dir/that/does/not/exist")
 
 	def testInit_raiseExceptionWhenDataDirIsNotWritable(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(IOError):
 			# NOTE The test should never be run as root in the first
 			# place. Otherwise this test will fail.
 			data_store.DataStore("/root")
