@@ -9,8 +9,8 @@ class DataStore():
 		if data_dir:
 			self.data_dir = data_dir
 
-	def save(self):
+	def save(self, line):
 		recordFile = os.path.join(self.data_dir, "foo.txt")
 		f = open(recordFile, "a")
-		f.write("foobar\n")
+		f.write("%s\n" % line)
 		f.close()
