@@ -40,3 +40,12 @@ class DataStoreTestCase(unittest.TestCase):
 			self.assertEqual(expectedLine, open(self.expectedFile).readlines()[0].rstrip())
 		finally:
 			os.remove(self.expectedFile)
+
+	def testRecords_returnsNumberOfLines(self):
+		self.ds.save("foo")
+		self.ds.save("bar")
+		self.ds.save("blub")
+		try:
+			self.assertEqual(3, self.ds.records())
+		finally:
+			os.remove(self.expectedFile)
