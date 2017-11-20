@@ -5,6 +5,7 @@
 	"server_password":	"soyuz",
 	"server_upload_period_sec":	1,
 	"server_poll_period_sec":	1,
+	"data_dir":		"test-datadir",
 	"data_inputs":		[
 		{"name": "Hatch 1 Lock",	"class": "Pin"},
 		{"name": "Hatch 2 Lock",	"class": "Pin"},
