@@ -102,7 +102,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.get_data()
 		self.assertEqual(True, st_save_called)
 
-	def testGetData_classDataStoreSaveWithDataRecordAsArgument(self):
+	def testGetData_callsDataStoreSaveWithDataRecordAsArgument(self):
 		global st_save_arg_line
 		st_save_arg_line = None
 		self.dl.data_store.save = fake_st_save
