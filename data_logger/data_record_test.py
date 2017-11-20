@@ -11,3 +11,6 @@ class DataRecordTestCase(unittest.TestCase):
 
 	def testTimestampIsNow(self):
 		self.assertEqual(self.now, self.dr.timestamp)
+
+	def testMeasurementsIsOfTypeList(self):
+		self.assertEqual(True, isinstance(self.dr.measurements, list))
