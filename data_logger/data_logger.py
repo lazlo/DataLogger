@@ -1,6 +1,7 @@
 import data_store
 import data_server
 import data_input
+import data_record
 
 class DataLogger():
 
@@ -18,11 +19,10 @@ class DataLogger():
 			self.data_inputs.append(di_obj)
 
 	def get_data(self):
-		# FIXME create a data_record object for each call
+		rec = data_record.DataRecord()
 		for di in self.data_inputs:
 			di.get_data()
-		# FIXME pass data_record to data_store
-		self.data_store.save()
+		self.data_store.save(rec)
 
 	def update(self):
 		self.get_data()

@@ -5,6 +5,7 @@ import config
 import data_store
 import data_server
 import data_input
+import data_record
 
 di_get_data_called = False
 di_get_data_called_ntimes = 0
@@ -20,9 +21,12 @@ def fake_dl_get_data():
 	dl_get_data_called = True
 
 st_save_called = False
-def fake_st_save():
+st_save_arg_line = None
+def fake_st_save(line):
 	global st_save_called
+	global st_save_arg_line
 	st_save_called = True
+	st_save_arg_line = line
 
 ds_upload_called = False
 def fake_ds_upload(body):
@@ -92,6 +96,13 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.data_store.save = fake_st_save
 		self.dl.get_data()
 		self.assertEqual(True, st_save_called)
+
+	def testGetData_classDataStoreSaveWithDataRecordAsArgument(self):
+		global st_save_arg_line
+		st_save_arg_line = None
+		self.dl.data_store.save = fake_st_save
+		self.dl.get_data()
+		self.assertEqual(True, isinstance(st_save_arg_line, data_record.DataRecord))
 
 	def testUpdate_callsGetData(self):
 		global dl_get_data_called
