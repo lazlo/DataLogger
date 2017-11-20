@@ -11,16 +11,14 @@ class DataServer():
 		self.path = url.path
 		self.user = user
 		self.password = password
+		self.req_method = "POST"
+		self.req_headers = {"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}
 		self.httpconn = httplib.HTTPConnection(self.host, self.port)
 		self.error = None
 
 	def upload(self, body):
-		method = "POST"
-		url = self.path
-		body = urllib.urlencode(body)
-		headers = {"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}
 		try:
-			self.httpconn.request(method, url, body, headers)
+			self.httpconn.request(self.req_method, self.path, urllib.urlencode(body), self.req_headers)
 		except Exception as ex:
 			self.error = ex.message
 			return False
