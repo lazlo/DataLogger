@@ -14,6 +14,10 @@ class DataStoreTestCase(unittest.TestCase):
 	def tearDown(self):
 		os.rmdir(self.expectedDataDir)
 
+	def testInit_raisesExceptionWhenDataDirDoesNotExist(self):
+		with self.assertRaises(Exception):
+			data_store.DataStore("/some/dir/that/does/not/exist")
+
 	def testInit_dataDirIsSet(self):
 		self.assertEqual(self.expectedDataDir, self.ds.data_dir)
 

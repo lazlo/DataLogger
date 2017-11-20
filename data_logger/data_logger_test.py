@@ -1,4 +1,5 @@
 import unittest
+import os
 
 import data_logger
 import config
@@ -39,7 +40,11 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.expectedCfgFile = "../example/data_logger_test_cfg.json"
 		self.expectedCfg = config.Config()
 		self.expectedCfg.load_file(self.expectedCfgFile)
+		os.mkdir(self.expectedCfg.data_dir)
 		self.dl = data_logger.DataLogger(self.expectedCfg)
+
+	def tearDown(self):
+		os.rmdir(self.expectedCfg.data_dir)
 
 	def testInit_dataStoreIsObject(self):
 		self.assertEqual(True, isinstance(self.dl.data_store, data_store.DataStore))
