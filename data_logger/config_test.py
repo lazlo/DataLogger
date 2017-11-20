@@ -6,6 +6,7 @@ import config
 class ConfigTestCase(unittest.TestCase):
 
 	def setUp(self):
+		self.test_cfg_file = "data_logger_test_cfg.json"
 		self.cfg = config.Config()
 		self.cfg.system_name = "cargoContainer-23"
 		self.cfg.server_addr = "localhost"
@@ -83,10 +84,9 @@ class ConfigTestCase(unittest.TestCase):
 		self.assertEqual(True, self.cfg.is_valid())
 
 	def testLoadFile_setsFieldsFromJSONFile(self):
-		test_cfg_file = "data_logger_test_cfg.json"
-		c1 = json.loads(open(test_cfg_file).read())
+		c1 = json.loads(open(self.test_cfg_file).read())
 		c2 = config.Config()
-		c2.load_file(test_cfg_file)
+		c2.load_file(self.test_cfg_file)
 		self.assertEqual(c1, c2.__dict__)
 
 	def testDataInputExists_returnsTrueOnMatch(self):
