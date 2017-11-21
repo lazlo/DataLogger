@@ -1,11 +1,11 @@
 {
-	"system_name":		"satelite42",
-	"server_addr":		"http://localhost:3000/db/23/req/insert",
-	"server_user":		"gagarin",
-	"server_password":	"soyuz",
-	"server_upload_period_sec":	1,
-	"server_poll_period_sec":	1,
-	"data_dir":		"test-datadir",
+	"system_name":				"satelite42",
+	"server_addr":				"http://localhost:3000/db/23/req/insert",
+	"server_user":				"gagarin",
+	"server_password":			"soyuz",
+	"server_upload_period_sec":		1,
+	"server_poll_period_sec":		1,
+	"data_dir":				"test-datadir",
 	"data_inputs_sample_period_sec":	1,
 	"data_inputs":		[
 		{"name": "Hatch 1 Lock",	"class": "Pin"},
