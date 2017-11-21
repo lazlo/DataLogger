@@ -40,6 +40,10 @@ class DataServerTestCase(unittest.TestCase):
 		self.expectedRequestHeaders = {"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}
 		self.srv = data_server.DataServer(self.expectedAddr, self.expectedUser, self.expectedPassword)
 
+	#
+	# __init__()
+	#
+
 	def testInit_addrIsSetToHost(self):
 		self.assertEqual(self.expectedHost, self.srv.host)
 
@@ -55,6 +59,10 @@ class DataServerTestCase(unittest.TestCase):
 	def testInit_errorIsNone(self):
 		self.assertEqual(None, self.srv.error)
 
+	#
+	# _create_http_conn()
+	#
+
 	def testCreateHttpConn_returnsLibHttpHttpConnectionObject(self):
 		self.assertEqual(True, isinstance(self.srv._create_http_conn(), httplib.HTTPConnection))
 
@@ -64,6 +72,10 @@ class DataServerTestCase(unittest.TestCase):
 
 	def testCreateHttpConnt_returnsObjWithPortSetToPortPartOfAddressConfigValue(self):
 		self.assertEqual(self.expectedPort, self.srv.httpconn.port)
+
+	#
+	# upload()
+	#
 
 	def testUpload_callsHttpConnRequest(self):
 		global httpconn_request_called
