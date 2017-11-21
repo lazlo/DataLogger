@@ -52,6 +52,10 @@ class DataLoggerTestCase(unittest.TestCase):
 	def tearDown(self):
 		os.rmdir(self.expectedCfg.data_dir)
 
+	#
+	# __ini__()
+	#
+
 	def testInit_startupTimeSecIsSetToNow(self):
 		dl = data_logger.DataLogger(self.expectedCfg)
 		self.assertEqual(self.expectedStartupTimeSec, dl.startup_time_sec)
@@ -99,6 +103,10 @@ class DataLoggerTestCase(unittest.TestCase):
 				break
 		self.assertEqual(True, ofExpectedType)
 
+	#
+	# get_data()
+	#
+
 	def testGetData_callsGetDataOnObjectsInDataInputsList(self):
 		global di_get_data_called
 		di_get_data_called = False
@@ -142,6 +150,10 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.data_store.save = fake_st_save
 		self.dl.get_data()
 		self.assertEqual(True, isinstance(st_save_arg_line, dict))
+
+	#
+	# update()
+	#
 
 	def testUpdate_setsNextDataInputsSampleTimeSec(self):
 		global time_value
