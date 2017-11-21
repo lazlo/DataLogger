@@ -38,6 +38,7 @@ def fake_ds_upload(body):
 class DataLoggerTestCase(unittest.TestCase):
 
 	def setUp(self):
+		self.expectedStartupTimeSec = int(time.time())
 		self.expectedCfgFile = "../example/data_logger_test_cfg.json"
 		self.expectedCfg = config.Config()
 		self.expectedCfg.load_file(self.expectedCfgFile)
@@ -47,10 +48,9 @@ class DataLoggerTestCase(unittest.TestCase):
 	def tearDown(self):
 		os.rmdir(self.expectedCfg.data_dir)
 
-	def testInit_startUpTimestampIsSetToNow(self):
-		expectedTime = int(time.time())
+	def testInit_startupTimeSecIsSetToNow(self):
 		dl = data_logger.DataLogger(self.expectedCfg)
-		self.assertEqual(expectedTime, dl.startup_time)
+		self.assertEqual(self.expectedStartupTimeSec, dl.startup_time_sec)
 
 	def testInit_dataStoreIsObject(self):
 		self.assertEqual(True, isinstance(self.dl.data_store, data_store.DataStore))
