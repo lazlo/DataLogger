@@ -189,13 +189,24 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.update()
 		self.assertEqual(False, dl_get_data_called)
 
-	def testUpdate_callsDataServerUpload(self):
+	def testUpdate_callsDataServerUploadWhenScheduled(self):
+		global time_value
+		global ds_upload_called
+		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_upload_period_sec
+		ds_upload_called = False
+		self.dl._time = fake_time
+		self.dl.data_server.upload = fake_ds_upload
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
+		self.dl.update()
+		self.assertEqual(True, ds_upload_called)
+
+	def testUpdate_doesNotCallDataServerUploadWhenNotScheduled(self):
 		global ds_upload_called
 		ds_upload_called = False
 		self.dl.data_server.upload = fake_ds_upload
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
-		self.assertEqual(True, ds_upload_called)
+		self.assertEqual(False, ds_upload_called)
 
 if __name__ == "__main__":
 	unittest.main()

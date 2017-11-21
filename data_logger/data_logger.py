@@ -47,6 +47,7 @@ class DataLogger():
 
 	def update(self):
 		do_get_data = False
+		do_server_upload = False
 
 		now = self._time()
 		if now >= self.next_data_inputs_sample_time_sec:
@@ -54,12 +55,14 @@ class DataLogger():
 			do_get_data = True
 		if now >= self.next_server_upload_time_sec:
 			self.next_server_upload_time_sec = now + self.config.server_upload_period_sec
+			do_server_upload = True
 		if now >= self.next_server_poll_time_sec:
 			self.next_server_poll_time_sec = now + self.config.server_poll_period_sec
 
 		if do_get_data:
 			self.get_data()
-		body = {}
-		self.data_server.upload(body)
-		# FIXME check return value of upload
-		# FIXME on success, delete serialized version of data_record from data_store
+		if do_server_upload:
+			body = {}
+			self.data_server.upload(body)
+			# FIXME check return value of upload
+			# FIXME on success, delete serialized version of data_record from data_store
