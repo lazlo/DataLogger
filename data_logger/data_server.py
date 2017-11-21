@@ -13,8 +13,11 @@ class DataServer():
 		self.password = password
 		self.req_method = "POST"
 		self.req_headers = {"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}
-		self.httpconn = httplib.HTTPConnection(self.host, self.port)
+		self.httpconn = self._create_http_conn(self.host, self.port)
 		self.error = None
+
+	def _create_http_conn(self):
+		return httplib.HTTPConnection(self.host, self.port)
 
 	def upload(self, body):
 		try:

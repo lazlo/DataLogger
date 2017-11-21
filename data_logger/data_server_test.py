@@ -52,14 +52,18 @@ class DataServerTestCase(unittest.TestCase):
 	def testInit_httpConnIsInstanceOfHTTPConnection(self):
 		self.assertEqual(True, isinstance(self.srv.httpconn, httplib.HTTPConnection))
 
-	def testInit_httpConnHostIsSetToHostPartOfAddressConfigValue(self):
-		self.assertEqual(self.expectedHost, self.srv.httpconn.host)
-
-	def testInit_httpConnPortIsSetToPortPartOfAddressConfigValue(self):
-		self.assertEqual(self.expectedPort, self.srv.httpconn.port)
-
 	def testInit_errorIsNone(self):
 		self.assertEqual(None, self.srv.error)
+
+	def testCreateHttpConn_returnsLibHttpHttpConnectionObject(self):
+		self.assertEqual(True, isinstance(self.srv._create_http_conn(), httplib.HTTPConnection))
+
+	def testCreateHttpConn_returnsObjWithHostSetToHostPartOfAddressConfigValue(self):
+		conn = self.srv._create_http_conn()
+		self.assertEqual(self.expectedHost, conn.host)
+
+	def testCreateHttpConnt_returnsObjWithPortSetToPortPartOfAddressConfigValue(self):
+		self.assertEqual(self.expectedPort, self.srv.httpconn.port)
 
 	def testUpload_callsHttpConnRequest(self):
 		global httpconn_request_called
