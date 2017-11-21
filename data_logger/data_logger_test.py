@@ -70,18 +70,6 @@ class DataLoggerTestCase(unittest.TestCase):
 		dl = data_logger.DataLogger(self.expectedCfg)
 		self.assertEqual(self.expectedStartupTimeSec, dl.startup_time_sec)
 
-	def testInit_nextDataInputsSampleTimeSecIsSetToNowPlusConfigValue(self):
-		expected = self.expectedStartupTimeSec + self.expectedCfg.data_inputs_sample_period_sec
-		self.assertEqual(expected, self.dl.next_data_inputs_sample_time_sec)
-
-	def testInit_nextServerUploadTimeSecIsSetToNowPlusConfigValue(self):
-		expected = self.expectedStartupTimeSec + self.expectedCfg.server_upload_period_sec
-		self.assertEqual(expected, self.dl.next_server_upload_time_sec)
-
-	def testInit_nextServerPollTimeSecIsSetToNowPlusConfigValue(self):
-		expected = self.expectedStartupTimeSec + self.expectedCfg.server_poll_period_sec
-		self.assertEqual(expected, self.dl.next_server_poll_time_sec)
-
 	def testInit_nextSchedUpdateTimeSecIsSetToNowPlusOneSecond(self):
 		expected = self.expectedStartupTimeSec + self.dl.sch_update_period_sec
 		self.assertEqual(expected, self.dl.next_sched_update_time_sec)
@@ -172,33 +160,6 @@ class DataLoggerTestCase(unittest.TestCase):
 	# update()
 	#
 
-	def testUpdate_setsNextDataInputsSampleTimeSec(self):
-		global time_value
-		time_value = self.expectedStartupTimeSec + self.expectedCfg.data_inputs_sample_period_sec
-		expected = time_value + self.expectedCfg.data_inputs_sample_period_sec
-		self.dl._time = fake_time
-		self.dl.data_store.save = fake_st_save # override save() so no file will be created
-		self.dl.update()
-		self.assertEqual(expected, self.dl.next_data_inputs_sample_time_sec)
-
-	def testUpdate_setsNextServerUploadTimeSec(self):
-		global time_value
-		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_upload_period_sec
-		expected = time_value + self.expectedCfg.server_upload_period_sec
-		self.dl._time = fake_time
-		self.dl.data_store.save = fake_st_save # override save() so no file will be created
-		self.dl.update()
-		self.assertEqual(expected, self.dl.next_server_upload_time_sec)
-
-	def testUpdate_setsNextServerPollTimeSec(self):
-		global time_value
-		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_poll_period_sec
-		expected = time_value + self.expectedCfg.server_poll_period_sec
-		self.dl._time = fake_time
-		self.dl.data_store.save = fake_st_save # override save() so no file will be created
-		self.dl.update()
-		self.assertEqual(expected, self.dl.next_server_poll_time_sec)
-
 	def testUpdate_setsNextSchedUpdateTimeSec(self):
 		global time_value
 		time_value = self.expectedStartupTimeSec + self.dl.sch_update_period_sec
@@ -214,7 +175,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		time_value = self.expectedStartupTimeSec + self.expectedCfg.data_inputs_sample_period_sec
 		dl_get_data_called = False
 		self.dl._time = fake_time
-		self.dl.get_data = fake_dl_get_data
+		self.dl.sch.tasks[0].fp = fake_dl_get_data
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(True, dl_get_data_called)
@@ -222,7 +183,7 @@ class DataLoggerTestCase(unittest.TestCase):
 	def testUpdate_doesNotCallGetDataWhenNotScheduled(self):
 		global dl_get_data_called
 		dl_get_data_called = False
-		self.dl.get_data = fake_dl_get_data
+		self.dl.sch.tasks[0].fp = fake_dl_get_data
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(False, dl_get_data_called)
@@ -233,7 +194,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_upload_period_sec
 		dl_upload_called = False
 		self.dl._time = fake_time
-		self.dl.upload = fake_dl_upload
+		self.dl.sch.tasks[1].fp = fake_dl_upload
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(True, dl_upload_called)
@@ -241,7 +202,7 @@ class DataLoggerTestCase(unittest.TestCase):
 	def testUpdate_doesNotCallUploadWhenNotScheduled(self):
 		global dl_upload_called
 		dl_upload_called = False
-		self.dl.upload = fake_dl_upload
+		self.dl.sch.tasks[1].fp = fake_dl_upload
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(False, dl_upload_called)
@@ -252,7 +213,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_poll_period_sec
 		dl_poll_called = False
 		self.dl._time = fake_time
-		self.dl.poll = fake_dl_poll
+		self.dl.sch.tasks[2].fp = fake_dl_poll
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(True, dl_poll_called)
@@ -260,7 +221,7 @@ class DataLoggerTestCase(unittest.TestCase):
 	def testUpdate_doesNotCallPollWhenNotScheduled(self):
 		global dl_poll_called
 		dl_poll_called = False
-		self.dl.poll = fake_dl_poll
+		self.dl.sch.tasks[2].fp = fake_dl_poll
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(False, dl_poll_called)
