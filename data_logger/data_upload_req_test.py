@@ -5,7 +5,11 @@ import data_upload_req
 class DataUploadRequestTestCase(unittest.TestCase):
 
 	def setUp(self):
-		self.req = data_upload_req.DataUploadRequest()
+		self.expectedName = "station23"
+		self.req = data_upload_req.DataUploadRequest(self.expectedName)
 
-	def testFoo(self):
-		self.assertEqual(True, True)
+	def testInit_loggerNameIsSet(self):
+		self.assertEqual(self.expectedName, self.req.logger_name)
+
+	def testInit_recordsIsTypeList(self):
+		self.assertEqual(True, isinstance(self.req.records, list))
