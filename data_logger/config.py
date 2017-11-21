@@ -11,6 +11,7 @@ class Config():
 		self.server_upload_period_sec = None
 		self.server_poll_period_sec = None
 		self.data_dir = None
+		self.data_inputs_sample_period_sec = None
 		self.data_inputs = None
 		self.data_record_format = None
 
@@ -26,6 +27,8 @@ class Config():
 		if not self.server_upload_period_sec:
 			return False
 		if not self.server_poll_period_sec:
+			return False
+		if not self.data_inputs_sample_period_sec:
 			return False
 		if not self.data_inputs:
 			return False
@@ -78,6 +81,7 @@ class Config():
 		self.server_poll_period_sec = d["server_poll_period_sec"]
 		if "data_dir" in d.keys():
 			self.data_dir = d["data_dir"]
+		self.data_inputs_sample_period_sec = d["data_inputs_sample_period_sec"]
 		self.data_inputs = d["data_inputs"]
 		self.data_record_format = d["data_record_format"]
 
