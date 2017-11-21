@@ -38,21 +38,21 @@ class DataLoggerSchedTestCase(unittest.TestCase):
 
 	def testAdd_insertsTaskIntoTaskListWithFirstArgumentAsFunctionPointer(self):
 		self.sch.add(testTask1, 1, 0)
-		self.assertEqual(testTask1, self.sch.tasks[0]["fp"])
+		self.assertEqual(testTask1, self.sch.tasks[0].fp)
 
 	def testAdd_insertsTaskIntoTaskListWithSecondArgumentPeriodInSeconds(self):
 		period_sec = 20
 		self.sch.add(testTask1, period_sec, 0)
-		self.assertEqual(period_sec, self.sch.tasks[0]["period_sec"])
+		self.assertEqual(period_sec, self.sch.tasks[0].period_sec)
 
 	def testAdd_insertsTaskIntoTaskListWithThirdArgumentDelayInSeconds(self):
 		delay_sec = 10
 		self.sch.add(testTask1, 15, delay_sec)
-		self.assertEqual(delay_sec, self.sch.tasks[0]["delay_sec"])
+		self.assertEqual(delay_sec, self.sch.tasks[0].delay_sec)
 
 	def testAdd_insertsTaskWithDoRunSetToFalse(self):
 		self.sch.add(testTask1, 90, 0)
-		self.assertEqual(False, self.sch.tasks[0]["do_run"])
+		self.assertEqual(False, self.sch.tasks[0].do_run)
 
 	#
 	# update()
@@ -63,20 +63,20 @@ class DataLoggerSchedTestCase(unittest.TestCase):
 		self.sch.update()
 		self.sch.update()
 		self.sch.update()
-		self.assertEqual(7, self.sch.tasks[0]["delay_sec"])
+		self.assertEqual(7, self.sch.tasks[0].delay_sec)
 
 	def testUpdate_decrementsTaskDelaySecOnlyWhenGreaterZero(self):
 		self.sch.add(testTask2, 0, 2)
 		self.sch.update()
 		self.sch.update()
 		self.sch.update()
-		self.assertEqual(0, self.sch.tasks[0]["delay_sec"])
+		self.assertEqual(0, self.sch.tasks[0].delay_sec)
 
 	def testUpdate_setsDoRunTrueWhenDelaySecBecomesZero(self):
 		self.sch.add(testTask2, 0, 2)
 		self.sch.update()
 		self.sch.update()
-		self.assertEqual(True, self.sch.tasks[0]["do_run"])
+		self.assertEqual(True, self.sch.tasks[0].do_run)
 
 	#
 	# dispatch()
@@ -94,11 +94,11 @@ class DataLoggerSchedTestCase(unittest.TestCase):
 		self.sch.add(testTask1, 0, 0)
 		self.sch.update()
 		self.sch.dispatch()
-		self.assertEqual(False, self.sch.tasks[0]["do_run"])
+		self.assertEqual(False, self.sch.tasks[0].do_run)
 
 	def testDispatch_reloadsDelayWithPeriodAfterTaskWasExecuted(self):
 		period_sec = 10
 		self.sch.add(testTask1, period_sec, 0)
 		self.sch.update()
 		self.sch.dispatch()
-		self.assertEqual(period_sec, self.sch.tasks[0]["delay_sec"])
+		self.assertEqual(period_sec, self.sch.tasks[0].delay_sec)
