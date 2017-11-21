@@ -52,10 +52,13 @@ class DataLogger():
 		# FIXME on success, delete serialized version of data_record from data_store
 		return
 
-	# FIXME do_server_poll needs to be implemented
+	def poll(self):
+		return
+
 	def update(self):
 		do_get_data = False
 		do_server_upload = False
+		do_server_poll = False
 
 		now = self._time()
 		if now >= self.next_data_inputs_sample_time_sec:
@@ -66,8 +69,11 @@ class DataLogger():
 			do_server_upload = True
 		if now >= self.next_server_poll_time_sec:
 			self.next_server_poll_time_sec = now + self.config.server_poll_period_sec
+			do_server_poll = True
 
 		if do_get_data:
 			self.get_data()
 		if do_server_upload:
 			self.upload()
+		if do_server_poll:
+			self.poll()

@@ -39,6 +39,11 @@ def fake_dl_upload():
 	global dl_upload_called
 	dl_upload_called = True
 
+dl_poll_called = False
+def fake_dl_poll():
+	global dl_poll_called
+	dl_poll_called = True
+
 class DataLoggerTestCase(unittest.TestCase):
 
 	def setUp(self):
@@ -219,6 +224,25 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(False, dl_upload_called)
+
+	def testUpdate_callsPollWhenScheduled(self):
+		global time_value
+		global dl_poll_called
+		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_poll_period_sec
+		dl_poll_called = False
+		self.dl._time = fake_time
+		self.dl.poll = fake_dl_poll
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
+		self.dl.update()
+		self.assertEqual(True, dl_poll_called)
+
+	def testUpdate_doesNotCallPollWhenNotScheduled(self):
+		global dl_poll_called
+		dl_poll_called = False
+		self.dl.poll = fake_dl_poll
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
+		self.dl.update()
+		self.assertEqual(False, dl_poll_called)
 
 if __name__ == "__main__":
 	unittest.main()
