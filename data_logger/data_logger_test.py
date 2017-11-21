@@ -170,13 +170,24 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.update()
 		self.assertEqual(expected, self.dl.next_server_poll_time_sec)
 
-	def testUpdate_callsGetData(self):
+	def testUpdate_callsGetDataWhenScheduled(self):
+		global time_value
+		global dl_get_data_called
+		time_value = self.expectedStartupTimeSec + self.expectedCfg.data_inputs_sample_period_sec
+		dl_get_data_called = False
+		self.dl._time = fake_time
+		self.dl.get_data = fake_dl_get_data
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
+		self.dl.update()
+		self.assertEqual(True, dl_get_data_called)
+
+	def testUpdate_doesNotCallGetDataWhenNotScheduled(self):
 		global dl_get_data_called
 		dl_get_data_called = False
 		self.dl.get_data = fake_dl_get_data
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
-		self.assertEqual(True, dl_get_data_called)
+		self.assertEqual(False, dl_get_data_called)
 
 	def testUpdate_callsDataServerUpload(self):
 		global ds_upload_called
