@@ -71,7 +71,8 @@ class DataServerTestCase(unittest.TestCase):
 		self.assertEqual(self.expectedHost, conn.host)
 
 	def testCreateHttpConnt_returnsObjWithPortSetToPortPartOfAddressConfigValue(self):
-		self.assertEqual(self.expectedPort, self.srv.httpconn.port)
+		conn = self.srv._create_http_conn()
+		self.assertEqual(self.expectedPort, conn.port)
 
 	#
 	# upload()
