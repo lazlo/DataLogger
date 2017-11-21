@@ -3,9 +3,12 @@ import data_server
 import data_input
 import data_record
 
+import time
+
 class DataLogger():
 
 	def __init__(self, config):
+		self.startup_time = int(time.time())
 		self.config = config
 		self.data_store = data_store.DataStore(self.config.data_dir)
 		self.data_server = data_server.DataServer(self.config.server_addr, self.config.server_user, self.config.server_password)

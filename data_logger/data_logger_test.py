@@ -1,5 +1,6 @@
 import unittest
 import os
+import time
 
 import data_logger
 import config
@@ -45,6 +46,11 @@ class DataLoggerTestCase(unittest.TestCase):
 
 	def tearDown(self):
 		os.rmdir(self.expectedCfg.data_dir)
+
+	def testInit_startUpTimestampIsSetToNow(self):
+		expectedTime = int(time.time())
+		dl = data_logger.DataLogger(self.expectedCfg)
+		self.assertEqual(expectedTime, dl.startup_time)
 
 	def testInit_dataStoreIsObject(self):
 		self.assertEqual(True, isinstance(self.dl.data_store, data_store.DataStore))
