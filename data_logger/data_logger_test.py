@@ -161,6 +161,15 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.update()
 		self.assertEqual(expected, self.dl.next_server_upload_time_sec)
 
+	def testUpload_setsNextServerPollTimeSec(self):
+		global time_value
+		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_poll_period_sec
+		expected = time_value + self.expectedCfg.server_poll_period_sec
+		self.dl._time = fake_time
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
+		self.dl.update()
+		self.assertEqual(expected, self.dl.next_server_poll_time_sec)
+
 	def testUpdate_callsGetData(self):
 		global dl_get_data_called
 		dl_get_data_called = False
