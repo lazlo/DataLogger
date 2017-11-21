@@ -4,27 +4,32 @@ import data_server
 import httplib
 import urllib
 
-httpconn_request_called = False
-httpconn_request_arg_method = None
-httpconn_request_arg_url = None
-httpconn_request_arg_body = None
-httpconn_request_arg_headers = None
+create_http_conn_called = False
+create_http_conn_value = None
+def fake_create_http_conn():
+	global create_http_conn_called
+	create_http_conn_called = True
+	return create_http_conn_value
 
-def fake_httpconn_request(method, url, body=None, headers=None):
-	global httpconn_request_called
-	global httpconn_request_arg_method
-	global httpconn_request_arg_url
-	global httpconn_request_arg_body
-	global httpconn_request_arg_headers
-	httpconn_request_called = True
-	httpconn_request_arg_method = method
-	httpconn_request_arg_url = url
-	httpconn_request_arg_body = body
-	httpconn_request_arg_headers = headers
+class FakeHTTPConnection():
 
-exploding_httpconn_errmsg = None
-def fake_exploding_httpconn_request(method, url, body=None, headers=None):
-	raise Exception(exploding_httpconn_errmsg)
+	def __init__(self, host, port):
+		self.request_called = False
+		self.request_exception = None
+		self.host = host
+		self.port = port
+
+	def request(self, method, path, body, headers):
+		self.request_called = True
+		self.request_method = method
+		self.request_path = path
+		self.request_body = body
+		self.request_headers = headers
+		if self.request_exception:
+			raise self.request_exception
+
+	def get_response(self):
+		return
 
 class DataServerTestCase(unittest.TestCase):
 
@@ -53,8 +58,8 @@ class DataServerTestCase(unittest.TestCase):
 	def testInit_passwordIsSet(self):
 		self.assertEqual(self.expectedPassword, self.srv.password)
 
-	def testInit_httpConnIsInstanceOfHTTPConnection(self):
-		self.assertEqual(True, isinstance(self.srv.httpconn, httplib.HTTPConnection))
+	def testInit_httpConnIsNone(self):
+		self.assertEqual(None, self.srv.httpconn)
 
 	def testInit_errorIsNone(self):
 		self.assertEqual(None, self.srv.error)
@@ -78,67 +83,72 @@ class DataServerTestCase(unittest.TestCase):
 	# upload()
 	#
 
-	def testUpload_callsHttpConnRequest(self):
-		global httpconn_request_called
-		httpconn_request_called = False
-		self.srv.httpconn.request = fake_httpconn_request
+	def testUpload_callsCreateHttpConn(self):
+		global create_http_conn_called
+		create_http_conn_called = False
+		self.srv._create_http_conn = fake_create_http_conn
 		self.srv.upload(self.expectedRequestBody)
-		self.assertEqual(True, httpconn_request_called)
+		self.assertEqual(True, create_http_conn_called)
 
-	def testUpload_callsHttpConnRequestWithFirstArgumentMethodPost(self):
-		global httpconn_request_arg_method
-		httpconn_request_arg_method = None
-		self.srv.httpconn.request = fake_httpconn_request
+	def _mock_http_conn_via_create_http_conn(self, raise_exception_on_request=None):
+		global create_http_conn_value
+		create_http_conn_value = FakeHTTPConnection(self.expectedHost, self.expectedPort)
+		if raise_exception_on_request:
+			create_http_conn_value.request_exception = raise_exception_on_request
+		self.srv._create_http_conn = fake_create_http_conn
+
+	def testUpload_callsRequest(self):
+		self._mock_http_conn_via_create_http_conn()
 		self.srv.upload(self.expectedRequestBody)
-		self.assertEqual(self.expectedRequestMethod, httpconn_request_arg_method)
+		self.assertEqual(True, create_http_conn_value.request_called)
 
-	def testUpload_callsHttpConnRequestWithSecondArgumentUrl(self):
-		global httpconn_request_arg_url
-		httpconn_request_arg_url = None
-		self.srv.httpconn.request = fake_httpconn_request
+	def testUpload_callsRequestWithFirstArgumentMethodPost(self):
+		self._mock_http_conn_via_create_http_conn()
 		self.srv.upload(self.expectedRequestBody)
-		self.assertEqual(self.expectedUrl, httpconn_request_arg_url)
+		self.assertEqual(self.expectedRequestMethod, create_http_conn_value.request_method)
 
-	def testUpload_callsHttpConnRequestWithThirdArgumentBodyUrlEncoded(self):
-		global httpconn_request_arg_body
-		httpconn_request_arg_body = None
+	def testUpload_callsRequestWithSecondArgumentUrl(self):
+		self._mock_http_conn_via_create_http_conn()
+		self.srv.upload(self.expectedRequestBody)
+		self.assertEqual(self.expectedUrl, create_http_conn_value.request_path)
+
+	def testUpload_callsRequestWithThirdArgumentBodyUrlEncoded(self):
+		self._mock_http_conn_via_create_http_conn()
 		expected_body = urllib.urlencode(self.expectedRequestBody)
-		self.srv.httpconn.request = fake_httpconn_request
 		self.srv.upload(self.expectedRequestBody)
-		self.assertEqual(expected_body, httpconn_request_arg_body)
+		self.assertEqual(expected_body, create_http_conn_value.request_body)
 
-	def testUpload_callsHttpConnRequestWithFourthArgumentHeadersContentTypeApplicationJSONCharsetUTF8AcceptApplicationJSON(self):
-		global httpconn_request_arg_headers
-		httpconn_request_arg_headers = None
-		self.srv.httpconn.request = fake_httpconn_request
+	def testUpload_callsRequestWithFourthArgumentHeaders(self):
+		self._mock_http_conn_via_create_http_conn()
 		self.srv.upload(self.expectedRequestBody)
-		self.assertEqual(self.expectedRequestHeaders, httpconn_request_arg_headers)
+		self.assertEqual(self.expectedRequestHeaders, create_http_conn_value.request_headers)
 
 	def testUpload_returnsTrue(self):
-		self.srv.httpconn.request = fake_httpconn_request
+		self._mock_http_conn_via_create_http_conn()
 		rv = self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(True, rv)
 
 	def testUpload_returnsFalseOnException(self):
-		self.srv.httpconn.request = fake_exploding_httpconn_request
+		raise_exception_on_request = Exception()
+		self._mock_http_conn_via_create_http_conn(raise_exception_on_request)
 		rv = self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(False, rv)
 
 	def testUpload_setsErrorOnException(self):
-		global exploding_httpconn_errmsg
-		exploding_httpconn_errmsg = "Connection refused"
-		self.srv.httpconn.request = fake_exploding_httpconn_request
+		expectedErrorMsg = "Connection refused"
+		raise_exception_on_request = Exception(expectedErrorMsg)
+		self._mock_http_conn_via_create_http_conn(raise_exception_on_request)
 		self.srv.upload(self.expectedRequestBody)
-		self.assertEqual(exploding_httpconn_errmsg, self.srv.error)
+		self.assertEqual(expectedErrorMsg, self.srv.error)
 
 	def testUpload_setsErrorToNoneOnSuccess(self):
-		global exploding_httpconn_errmsg
-		exploding_httpconn_errmsg = "Forbidden"
-		self.srv.httpconn.request = fake_exploding_httpconn_request
+		expectedErrorMsg = "Forbidden"
+		raise_exception_on_request = Exception(expectedErrorMsg)
+		self._mock_http_conn_via_create_http_conn(raise_exception_on_request)
 		self.srv.upload(self.expectedRequestBody)
 		# as this point self.srv.error should be set
-		self.assertEqual(exploding_httpconn_errmsg, self.srv.error)
+		self.assertEqual(expectedErrorMsg, self.srv.error)
 		# now do a successful request
-		self.srv.httpconn.request = fake_httpconn_request
+		self._mock_http_conn_via_create_http_conn()
 		self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(None, self.srv.error)
