@@ -13,7 +13,7 @@ class DataServer():
 		self.password = password
 		self.req_method = "POST"
 		self.req_headers = {"Content-type": "application/json;charset=utf-8", "Accept": "application/json"}
-		self.httpconn = self._create_http_conn(self.host, self.port)
+		self.httpconn = self._create_http_conn()
 		self.error = None
 
 	def _create_http_conn(self):
