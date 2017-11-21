@@ -15,7 +15,8 @@ def main():
 	cfg = data_logger.Config()
 	cfg.load_file("data_logger_test_cfg.json")
 	dl = data_logger.DataLogger(cfg)
-	dl.update()
+	while True:
+		dl.update()
 
 if __name__ == "__main__":
 	main()
