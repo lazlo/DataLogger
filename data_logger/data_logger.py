@@ -45,6 +45,7 @@ class DataLogger():
 			rec.measurements.append(data)
 		self.data_store.save(rec.__dict__)
 
+	# FIXME do_server_poll needs to be implemented
 	def update(self):
 		do_get_data = False
 		do_server_upload = False
