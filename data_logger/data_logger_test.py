@@ -161,7 +161,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.update()
 		self.assertEqual(expected, self.dl.next_server_upload_time_sec)
 
-	def testUpload_setsNextServerPollTimeSec(self):
+	def testUpdate_setsNextServerPollTimeSec(self):
 		global time_value
 		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_poll_period_sec
 		expected = time_value + self.expectedCfg.server_poll_period_sec
