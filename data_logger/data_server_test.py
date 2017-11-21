@@ -2,7 +2,6 @@ import unittest
 
 import data_server
 import httplib
-import urllib
 
 create_http_conn_called = False
 create_http_conn_value = None
@@ -112,11 +111,10 @@ class DataServerTestCase(unittest.TestCase):
 		self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(self.expectedUrl, create_http_conn_value.request_path)
 
-	def testUpload_callsRequestWithThirdArgumentBodyUrlEncoded(self):
+	def testUpload_callsRequestWithThirdArgumentBody(self):
 		self._mock_http_conn_via_create_http_conn()
-		expected_body = urllib.urlencode(self.expectedRequestBody)
 		self.srv.upload(self.expectedRequestBody)
-		self.assertEqual(expected_body, create_http_conn_value.request_body)
+		self.assertEqual(self.expectedRequestBody, create_http_conn_value.request_body)
 
 	def testUpload_callsRequestWithFourthArgumentHeaders(self):
 		self._mock_http_conn_via_create_http_conn()
