@@ -34,10 +34,10 @@ def fake_st_save(line):
 	st_save_called = True
 	st_save_arg_line = line
 
-ds_upload_called = False
-def fake_ds_upload(body):
-	global ds_upload_called
-	ds_upload_called = True
+dl_upload_called = False
+def fake_dl_upload():
+	global dl_upload_called
+	dl_upload_called = True
 
 class DataLoggerTestCase(unittest.TestCase):
 
@@ -189,24 +189,24 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.update()
 		self.assertEqual(False, dl_get_data_called)
 
-	def testUpdate_callsDataServerUploadWhenScheduled(self):
+	def testUpdate_callsUploadWhenScheduled(self):
 		global time_value
-		global ds_upload_called
+		global dl_upload_called
 		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_upload_period_sec
-		ds_upload_called = False
+		dl_upload_called = False
 		self.dl._time = fake_time
-		self.dl.data_server.upload = fake_ds_upload
+		self.dl.upload = fake_dl_upload
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
-		self.assertEqual(True, ds_upload_called)
+		self.assertEqual(True, dl_upload_called)
 
-	def testUpdate_doesNotCallDataServerUploadWhenNotScheduled(self):
-		global ds_upload_called
-		ds_upload_called = False
-		self.dl.data_server.upload = fake_ds_upload
+	def testUpdate_doesNotCallUploadWhenNotScheduled(self):
+		global dl_upload_called
+		dl_upload_called = False
+		self.dl.upload = fake_dl_upload
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
-		self.assertEqual(False, ds_upload_called)
+		self.assertEqual(False, dl_upload_called)
 
 if __name__ == "__main__":
 	unittest.main()

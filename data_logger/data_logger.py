@@ -45,6 +45,13 @@ class DataLogger():
 			rec.measurements.append(data)
 		self.data_store.save(rec.__dict__)
 
+	def upload(self):
+		#body = {}
+		#self.data_server.upload(body)
+		# FIXME check return value of upload
+		# FIXME on success, delete serialized version of data_record from data_store
+		return
+
 	# FIXME do_server_poll needs to be implemented
 	def update(self):
 		do_get_data = False
@@ -63,7 +70,4 @@ class DataLogger():
 		if do_get_data:
 			self.get_data()
 		if do_server_upload:
-			body = {}
-			self.data_server.upload(body)
-			# FIXME check return value of upload
-			# FIXME on success, delete serialized version of data_record from data_store
+			self.upload()
