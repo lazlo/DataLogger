@@ -6,8 +6,9 @@ import SocketServer
 class DebugHTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 	def do_POST(self):
-		print(self.headers)
-		print(self.path)
+		#print(self.headers)
+		#print(self.path)
+		print(self.rfile.read(int(self.headers["Content-Length"])))
 		self.send_response(200)
 
 
