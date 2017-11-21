@@ -8,7 +8,7 @@ import time
 class DataLogger():
 
 	def __init__(self, config):
-		self.startup_time_sec = int(time.time())
+		self.startup_time_sec = self._time()
 		self.config = config
 		self.data_store = data_store.DataStore(self.config.data_dir)
 		self.data_server = data_server.DataServer(self.config.server_addr, self.config.server_user, self.config.server_password)
@@ -18,6 +18,12 @@ class DataLogger():
 		self.next_data_inputs_sample_time_sec	= self.startup_time_sec + self.config.data_inputs_sample_period_sec
 		self.next_server_upload_time_sec	= self.startup_time_sec + self.config.server_upload_period_sec
 		self.next_server_poll_time_sec		= self.startup_time_sec + self.config.server_poll_period_sec
+
+	def _time(self):
+		"""
+		This method exists only so we can mock time.time() in our unit tests
+		"""
+		return int(time.time())
 
 	def _populate_data_inputs(self):
 		for di_cfg in self.config.data_inputs:
