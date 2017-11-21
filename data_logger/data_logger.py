@@ -14,6 +14,10 @@ class DataLogger():
 		self.data_server = data_server.DataServer(self.config.server_addr, self.config.server_user, self.config.server_password)
 		self.data_inputs = []
 		self._populate_data_inputs()
+		# scheduling related variables
+		self.next_data_inputs_sample_time_sec	= self.startup_time_sec + self.config.data_inputs_sample_period_sec
+		self.next_server_upload_time_sec	= self.startup_time_sec + self.config.server_upload_period_sec
+		self.next_server_poll_time_sec		= self.startup_time_sec + self.config.server_poll_period_sec
 
 	def _populate_data_inputs(self):
 		for di_cfg in self.config.data_inputs:

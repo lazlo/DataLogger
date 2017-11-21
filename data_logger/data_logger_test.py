@@ -52,6 +52,18 @@ class DataLoggerTestCase(unittest.TestCase):
 		dl = data_logger.DataLogger(self.expectedCfg)
 		self.assertEqual(self.expectedStartupTimeSec, dl.startup_time_sec)
 
+	def testInit_nextDataInputsSampleTimeSecIsSetToNowPlusConfigValue(self):
+		expected = self.expectedStartupTimeSec + self.expectedCfg.data_inputs_sample_period_sec
+		self.assertEqual(expected, self.dl.next_data_inputs_sample_time_sec)
+
+	def testInit_nextServerUploadTimeSecIsSetToNowPlusConfigValue(self):
+		expected = self.expectedStartupTimeSec + self.expectedCfg.server_upload_period_sec
+		self.assertEqual(expected, self.dl.next_server_upload_time_sec)
+
+	def testInit_nextServerPollTimeSecIsSetToNowPlusConfigValue(self):
+		expected = self.expectedStartupTimeSec + self.expectedCfg.server_poll_period_sec
+		self.assertEqual(expected, self.dl.next_server_poll_time_sec)
+
 	def testInit_dataStoreIsObject(self):
 		self.assertEqual(True, isinstance(self.dl.data_store, data_store.DataStore))
 
