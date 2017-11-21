@@ -2,10 +2,13 @@ import data_store
 import data_server
 import data_input
 import data_record
+import data_logger_sched
 
 import time
 
 class DataLogger():
+
+	DEFAULT_SCHED_UPDATE_PERIOD_SEC = 1
 
 	def __init__(self, config):
 		self.startup_time_sec = self._time()
@@ -15,6 +18,9 @@ class DataLogger():
 		self.data_inputs = []
 		self._populate_data_inputs()
 		# scheduling related variables
+		self.sch_update_period_sec = self.DEFAULT_SCHED_UPDATE_PERIOD_SEC
+		self.sch = data_logger_sched.DataLoggerScheduler()
+		self.next_sched_update_time_sec		= self.startup_time_sec + self.sch_update_period_sec
 		self.next_data_inputs_sample_time_sec	= self.startup_time_sec + self.config.data_inputs_sample_period_sec
 		self.next_server_upload_time_sec	= self.startup_time_sec + self.config.server_upload_period_sec
 		self.next_server_poll_time_sec		= self.startup_time_sec + self.config.server_poll_period_sec
@@ -59,6 +65,7 @@ class DataLogger():
 		do_get_data = False
 		do_server_upload = False
 		do_server_poll = False
+		do_sch_update = False
 
 		now = self._time()
 		if now >= self.next_data_inputs_sample_time_sec:
@@ -70,6 +77,9 @@ class DataLogger():
 		if now >= self.next_server_poll_time_sec:
 			self.next_server_poll_time_sec = now + self.config.server_poll_period_sec
 			do_server_poll = True
+		if now >= self.next_sched_update_time_sec:
+			self.next_sched_update_time_sec = now + self.sch_update_period_sec
+			do_sch_update = True
 
 		if do_get_data:
 			self.get_data()
@@ -77,3 +87,5 @@ class DataLogger():
 			self.upload()
 		if do_server_poll:
 			self.poll()
+		if do_sch_update:
+			self.sch.update()

@@ -44,6 +44,11 @@ def fake_dl_poll():
 	global dl_poll_called
 	dl_poll_called = True
 
+sch_update_called = False
+def fake_sch_update():
+	global sch_update_called
+	sch_update_called = True
+
 class DataLoggerTestCase(unittest.TestCase):
 
 	def setUp(self):
@@ -76,6 +81,13 @@ class DataLoggerTestCase(unittest.TestCase):
 	def testInit_nextServerPollTimeSecIsSetToNowPlusConfigValue(self):
 		expected = self.expectedStartupTimeSec + self.expectedCfg.server_poll_period_sec
 		self.assertEqual(expected, self.dl.next_server_poll_time_sec)
+
+	def testInit_nextSchedUpdateTimeSecIsSetToNowPlusOneSecond(self):
+		expected = self.expectedStartupTimeSec + self.dl.sch_update_period_sec
+		self.assertEqual(expected, self.dl.next_sched_update_time_sec)
+
+	def testInit_schedUpdatePeriodSecIsSetToDefault(self):
+		self.assertEqual(data_logger.DataLogger.DEFAULT_SCHED_UPDATE_PERIOD_SEC, self.dl.sch_update_period_sec)
 
 	def testInit_dataStoreIsObject(self):
 		self.assertEqual(True, isinstance(self.dl.data_store, data_store.DataStore))
@@ -187,6 +199,15 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.update()
 		self.assertEqual(expected, self.dl.next_server_poll_time_sec)
 
+	def testUpdate_setsNextSchedUpdateTimeSec(self):
+		global time_value
+		time_value = self.expectedStartupTimeSec + self.dl.sch_update_period_sec
+		expected = time_value + self.dl.sch_update_period_sec
+		self.dl._time = fake_time
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
+		self.dl.update()
+		self.assertEqual(expected, self.dl.next_sched_update_time_sec)
+
 	def testUpdate_callsGetDataWhenScheduled(self):
 		global time_value
 		global dl_get_data_called
@@ -243,6 +264,25 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(False, dl_poll_called)
+
+	def testUpdate_callsSchedUpdateWhenScheduled(self):
+		global time_value
+		global sch_update_called
+		time_value = self.expectedStartupTimeSec + self.dl.sch_update_period_sec
+		sch_update_called = False
+		self.dl._time = fake_time
+		self.dl.sch.update = fake_sch_update
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
+		self.dl.update()
+		self.assertEqual(True, sch_update_called)
+
+	def testUpdate_doesNotCallSchedUpdateWhenNotScheduled(self):
+		global sch_update_called
+		sch_update_called = False
+		self.dl.sch.update = fake_sch_update
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
+		self.dl.update()
+		self.assertEqual(False, sch_update_called)
 
 if __name__ == "__main__":
 	unittest.main()
