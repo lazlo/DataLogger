@@ -1,0 +1,3 @@
+class DataLoggerScheduler():
+
+	pass
