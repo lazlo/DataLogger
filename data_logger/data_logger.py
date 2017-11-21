@@ -46,6 +46,10 @@ class DataLogger():
 		self.data_store.save(rec.__dict__)
 
 	def update(self):
+		now = self._time()
+		if now >= self.next_data_inputs_sample_time_sec:
+			self.next_data_inputs_sample_time_sec = now + self.config.data_inputs_sample_period_sec
+
 		self.get_data()
 		body = {}
 		self.data_server.upload(body)

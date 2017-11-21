@@ -9,6 +9,10 @@ import data_server
 import data_input
 import data_record
 
+time_value = None
+def fake_time():
+	return time_value
+
 di_get_data_called = False
 di_get_data_called_ntimes = 0
 def fake_di_get_data():
@@ -138,6 +142,15 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.data_store.save = fake_st_save
 		self.dl.get_data()
 		self.assertEqual(True, isinstance(st_save_arg_line, dict))
+
+	def testUpdate_setsNextDataInputsSampleTimeSec(self):
+		global time_value
+		time_value = self.expectedStartupTimeSec + self.expectedCfg.data_inputs_sample_period_sec
+		expected = time_value + self.expectedCfg.data_inputs_sample_period_sec
+		self.dl._time = fake_time
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
+		self.dl.update()
+		self.assertEqual(expected, self.dl.next_data_inputs_sample_time_sec)
 
 	def testUpdate_callsGetData(self):
 		global dl_get_data_called
