@@ -6,6 +6,7 @@ import data_logger_sched
 import data_upload_req
 
 import time
+import json
 
 class DataLogger():
 
@@ -61,7 +62,7 @@ class DataLogger():
 			di = self._get_data_input(di_name)
 			data = di.get_data()
 			rec.measurements.append(data)
-		self.data_store.save(rec.__dict__)
+		self.data_store.save(json.dumps(rec.__dict__))
 
 	def _build_data_upload_request(self):
 		ur = data_upload_req.DataUploadRequest(self.config.system_name)
