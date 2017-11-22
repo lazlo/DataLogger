@@ -22,6 +22,9 @@ class DataRecord():
 		else:
 			self.measurements = []
 
+	def to_json(self):
+		return json.dumps(self.__dict__)
+
 	@staticmethod
 	def from_json_string(input_str):
 		input_str = input_str.replace("'", "\"")

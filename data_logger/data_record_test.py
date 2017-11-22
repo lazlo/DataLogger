@@ -31,6 +31,9 @@ class DataRecordTestCase(unittest.TestCase):
 	def testInit_measurementsIsSetFromSecondArgument(self):
 		self.assertEqual(self.expectedMeasurements, data_record.DataRecord(self.expectedTimestamp, self.expectedMeasurements).measurements)
 
+	def testToJSON(self):
+		self.assertEqual(json.dumps(self.dr.__dict__), self.dr.to_json())
+
 	def testFromJSONString(self):
 		expected = data_record.DataRecord(self.expectedTimestamp, self.expectedMeasurements)
 		# NOTE python JSON parser seems to be able to only handle double qouted strings
