@@ -64,7 +64,10 @@ class DataLogger():
 		self.data_store.save(rec.__dict__)
 
 	def _build_data_upload_request(self):
-		return data_upload_req.DataUploadRequest(self.config.system_name)
+		ur = data_upload_req.DataUploadRequest(self.config.system_name)
+		rec = self.data_store.read_oldest()
+		ur.records.append(rec)
+		return ur
 
 	def upload(self):
 		body = {}
