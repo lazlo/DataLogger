@@ -9,8 +9,8 @@ class DataRecordTestCase(unittest.TestCase):
 		self.now = time.strftime("%Y-%m-%dT%H:%M:%S")
 		self.dr = data_record.DataRecord()
 
-	def testTimestampIsNow(self):
+	def testInit_timestampIsNow(self):
 		self.assertEqual(self.now, self.dr.timestamp)
 
-	def testMeasurementsIsOfTypeList(self):
+	def testInit_measurementsIsOfTypeList(self):
 		self.assertEqual(True, isinstance(self.dr.measurements, list))
