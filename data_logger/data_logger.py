@@ -3,6 +3,7 @@ import data_server
 import data_input
 import data_record
 import data_logger_sched
+import data_upload_req
 
 import time
 
@@ -61,6 +62,9 @@ class DataLogger():
 			data = di.get_data()
 			rec.measurements.append(data)
 		self.data_store.save(rec.__dict__)
+
+	def _build_data_upload_request(self):
+		return data_upload_req.DataUploadRequest(self.config.system_name)
 
 	def upload(self):
 		body = {}

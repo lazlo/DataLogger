@@ -8,6 +8,7 @@ import data_store
 import data_server
 import data_input
 import data_record
+import data_upload_req
 
 time_value = None
 def fake_time():
@@ -160,6 +161,13 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.data_store.save = fake_st_save
 		self.dl.get_data()
 		self.assertEqual(True, isinstance(st_save_arg_line, dict))
+
+	#
+	# _build_data_upload_request()
+	#
+
+	def testBuildDataUploadRequest_returnsDataUploadRequestObj(self):
+		self.assertEqual(True, isinstance(self.dl._build_data_upload_request(), data_upload_req.DataUploadRequest))
 
 	#
 	# upload()
