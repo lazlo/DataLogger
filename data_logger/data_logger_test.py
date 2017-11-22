@@ -34,6 +34,11 @@ def fake_st_save(line):
 	st_save_called = True
 	st_save_arg_line = line
 
+ds_upload_called = False
+def fake_ds_upload(body):
+	global ds_upload_called
+	ds_upload_called = True
+
 dl_upload_called = False
 def fake_dl_upload():
 	global dl_upload_called
@@ -155,6 +160,17 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.data_store.save = fake_st_save
 		self.dl.get_data()
 		self.assertEqual(True, isinstance(st_save_arg_line, dict))
+
+	#
+	# upload()
+	#
+
+	def testUpload_callsDataServerUpload(self):
+		global ds_upload_called
+		ds_upload_called = False
+		self.dl.data_server.upload = fake_ds_upload
+		self.dl.upload()
+		self.assertEqual(True, ds_upload_called)
 
 	#
 	# update()

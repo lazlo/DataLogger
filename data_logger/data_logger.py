@@ -63,8 +63,8 @@ class DataLogger():
 		self.data_store.save(rec.__dict__)
 
 	def upload(self):
-		#body = {}
-		#self.data_server.upload(body)
+		body = {}
+		self.data_server.upload(body)
 		# FIXME check return value of upload
 		# FIXME on success, delete serialized version of data_record from data_store
 		return
