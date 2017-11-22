@@ -75,6 +75,7 @@ class DataLogger():
 		return ur
 
 	def upload(self):
+		self._build_data_upload_request()
 		body = {}
 		self.data_server.upload(body)
 		# FIXME check return value of upload

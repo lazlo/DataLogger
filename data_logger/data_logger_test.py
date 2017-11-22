@@ -43,6 +43,11 @@ def fake_st_read_oldest():
 	st_read_oldest_called = True
 	return st_read_oldest_value
 
+dl_build_data_upload_request_called = False
+def fake_dl_build_data_upload_request():
+	global dl_build_data_upload_request_called
+	dl_build_data_upload_request_called = True
+
 ds_upload_called = False
 def fake_ds_upload(body):
 	global ds_upload_called
@@ -200,9 +205,17 @@ class DataLoggerTestCase(unittest.TestCase):
 	# upload()
 	#
 
+	def testUpload_callsBuildDataUploadRequest(self):
+		global dl_build_data_upload_request_called
+		dl_build_data_upload_request_called = False
+		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
+		self.dl.upload()
+		self.assertEqual(True, dl_build_data_upload_request_called)
+
 	def testUpload_callsDataServerUpload(self):
 		global ds_upload_called
 		ds_upload_called = False
+		self.dl.data_store.read_oldest = fake_st_read_oldest
 		self.dl.data_server.upload = fake_ds_upload
 		self.dl.upload()
 		self.assertEqual(True, ds_upload_called)
@@ -216,6 +229,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		time_value = self.expectedStartupTimeSec + self.dl.sch_update_period_sec
 		expected = time_value + self.dl.sch_update_period_sec
 		self.dl._time = fake_time
+		self.dl.sch.tasks[1].fp = fake_dl_upload # fake upload so no file access is performed via _build_data_upload_request() and DataStore.read_oldest()
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(expected, self.dl.next_sched_update_time_sec)
@@ -227,6 +241,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		dl_get_data_called = False
 		self.dl._time = fake_time
 		self.dl.sch.tasks[0].fp = fake_dl_get_data
+		self.dl.sch.tasks[1].fp = fake_dl_upload # also fake upload as the scheduling period can be the same as for get data
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(True, dl_get_data_called)
@@ -264,6 +279,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_poll_period_sec
 		dl_poll_called = False
 		self.dl._time = fake_time
+		self.dl.sch.tasks[1].fp = fake_dl_upload # also fake upload as the scheduling period can be the same as for poll
 		self.dl.sch.tasks[2].fp = fake_dl_poll
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
