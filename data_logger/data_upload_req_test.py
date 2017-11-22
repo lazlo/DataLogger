@@ -1,4 +1,5 @@
 import unittest
+import json
 
 import data_upload_req
 
@@ -13,3 +14,6 @@ class DataUploadRequestTestCase(unittest.TestCase):
 
 	def testInit_recordsIsTypeList(self):
 		self.assertEqual(True, isinstance(self.req.records, list))
+
+	def testToJSON(self):
+		self.assertEqual(json.dumps(self.req.__dict__), self.req.to_json())
