@@ -26,6 +26,6 @@ class DataRecord():
 		return json.dumps(self.__dict__)
 
 	@staticmethod
-	def from_json_string(input_str):
+	def from_json(input_str):
 		data = json.loads(input_str)
 		return DataRecord(data["timestamp"], data["measurements"])

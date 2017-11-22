@@ -34,7 +34,7 @@ class DataRecordTestCase(unittest.TestCase):
 	def testToJSON(self):
 		self.assertEqual(json.dumps(self.dr.__dict__), self.dr.to_json())
 
-	def testFromJSONString(self):
+	def testFromJSON(self):
 		expected = data_record.DataRecord(self.expectedTimestamp, self.expectedMeasurements)
 		input_str = json.dumps(expected.__dict__)
-		self.assertEqual(expected.__dict__, data_record.DataRecord.from_json_string(input_str).__dict__)
+		self.assertEqual(expected.__dict__, data_record.DataRecord.from_json(input_str).__dict__)
