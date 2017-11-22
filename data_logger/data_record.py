@@ -8,6 +8,7 @@
 #     ]
 # }
 import time
+import json
 
 class DataRecord():
 
@@ -20,3 +21,8 @@ class DataRecord():
 			self.measurements = measurements
 		else:
 			self.measurements = []
+
+	@staticmethod
+	def from_json_string(input_str):
+		data = json.loads(input_str)
+		return DataRecord(data["timestamp"], data["measurements"])
