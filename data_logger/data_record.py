@@ -11,6 +11,12 @@ import time
 
 class DataRecord():
 
-	def __init__(self):
-		self.timestamp = time.strftime("%Y-%m-%dT%H:%M:%S")
-		self.measurements = []
+	def __init__(self, timestamp=None, measurements=None):
+		if timestamp:
+			self.timestamp = timestamp
+		else:
+			self.timestamp = time.strftime("%Y-%m-%dT%H:%M:%S")
+		if measurements:
+			self.measurements = measurements
+		else:
+			self.measurements = []
