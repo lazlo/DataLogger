@@ -27,6 +27,5 @@ class DataRecord():
 
 	@staticmethod
 	def from_json_string(input_str):
-		input_str = input_str.replace("'", "\"")
 		data = json.loads(input_str)
 		return DataRecord(data["timestamp"], data["measurements"])
