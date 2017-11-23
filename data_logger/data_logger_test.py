@@ -186,31 +186,6 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.get_data()
 		self.assertEqual(3, len(self.dl.data_store.data_records))
 
-	def testGetData_callsDataStoreSave(self):
-		global st_save_called
-		st_save_called = False
-		self.dl.data_store.save = fake_st_save
-		self.dl.get_data()
-		self.assertEqual(True, st_save_called)
-
-	def testGetData_callsDataStoreSaveWithDataRecordJSONStringAsArgument(self):
-		"""
-		NOTE We only check that the type of argument is a dict, not its contents.
-		"""
-		global st_save_arg_line
-		st_save_arg_line = None
-
-		dr = data_record.DataRecord()
-		for di_name in self.dl.config.data_record_format:
-			di = self.dl._get_data_input(di_name)
-			data = di.get_data()
-			dr.measurements.append(data)
-		expected = json.dumps(dr.__dict__)
-
-		self.dl.data_store.save = fake_st_save
-		self.dl.get_data()
-		self.assertEqual(expected, st_save_arg_line)
-
 	#
 	# save_data()
 	#
