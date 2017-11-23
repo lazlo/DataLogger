@@ -174,6 +174,13 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.get_data()
 		self.assertEqual(len(self.dl.config.data_record_format), di_get_data_called_ntimes)
 
+	def testGetData_appendsDataRecordToDataStoreDataRecords(self):
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
+		self.dl.get_data()
+		self.dl.get_data()
+		self.dl.get_data()
+		self.assertEqual(3, len(self.dl.data_store.data_records))
+
 	def testGetData_callsDataStoreSave(self):
 		global st_save_called
 		st_save_called = False

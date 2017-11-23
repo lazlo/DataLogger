@@ -64,6 +64,7 @@ class DataLogger():
 			rec.measurements.append(data)
 		# FIXME Move complexity of transfroming object to dict and then to JSON
 		# into DataStore.save()
+		self.data_store.data_records.append(rec)
 		self.data_store.save(json.dumps(rec.__dict__))
 
 	def _build_data_upload_request(self):
