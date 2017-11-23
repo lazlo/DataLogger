@@ -98,7 +98,6 @@ class DataStoreTestCase(unittest.TestCase):
 		finally:
 			os.remove(self.expectedFile)
 
-	"""
 	def testRecords_returnsNumberOfLines(self):
 		for i in range(0, 3):
 			self.ds.data_records.append(data_record.DataRecord())
@@ -107,7 +106,6 @@ class DataStoreTestCase(unittest.TestCase):
 			self.assertEqual(3, self.ds.records())
 		finally:
 			os.remove(self.expectedFile)
-	"""
 
 	def testReadOldest_returnsFirstLine(self):
 		dr = data_record.DataRecord("magic-timestamp-used-for-this-test")
