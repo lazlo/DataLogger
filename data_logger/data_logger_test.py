@@ -45,6 +45,11 @@ def fake_dl_get_data():
 	global dl_get_data_called
 	dl_get_data_called = True
 
+dl_save_data_called = False
+def fake_dl_save_data():
+	global dl_save_data_called
+	dl_save_data_called = True
+
 dl_build_data_upload_request_called = False
 dl_build_data_upload_request_value = None
 def fake_dl_build_data_upload_request():
@@ -286,10 +291,12 @@ class DataLoggerTestCase(unittest.TestCase):
 		time_value = self.expectedStartupTimeSec + self.dl.sch_update_period_sec
 		expected = time_value + self.dl.sch_update_period_sec
 		self.dl._time = fake_time
-		self.dl.sch.tasks[1].fp = fake_dl_upload # fake upload so no file access is performed via _build_data_upload_request() and DataStore.read_oldest()
+		self.dl.sch.tasks[2].fp = fake_dl_upload # fake upload so no file access is performed via _build_data_upload_request() and DataStore.read_oldest()
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(expected, self.dl.next_sched_update_time_sec)
+
+	# update() calls get_data()
 
 	def testUpdate_callsGetDataWhenScheduled(self):
 		global time_value
@@ -298,7 +305,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		dl_get_data_called = False
 		self.dl._time = fake_time
 		self.dl.sch.tasks[0].fp = fake_dl_get_data
-		self.dl.sch.tasks[1].fp = fake_dl_upload # also fake upload as the scheduling period can be the same as for get data
+		self.dl.sch.tasks[2].fp = fake_dl_upload # also fake upload as the scheduling period can be the same as for get data
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(True, dl_get_data_called)
@@ -311,13 +318,29 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.update()
 		self.assertEqual(False, dl_get_data_called)
 
+	# update() calls save_data()
+
+	def testUpdate_callsSaveDataWhenScheduled(self):
+		global time_value
+		global dl_save_data_called
+		time_value = self.expectedStartupTimeSec + self.expectedCfg.data_inputs_storage_period_sec
+		dl_save_data_called = False
+		self.dl._time = fake_time
+		self.dl.sch.tasks[1].fp = fake_dl_save_data
+		self.dl.sch.tasks[2].fp = fake_dl_upload # also fake upload as the scheduling period can be the same as the task under test
+		self.dl.data_store.save = fake_st_save # override save() so no file will be created
+		self.dl.update()
+		self.assertEqual(True, dl_save_data_called)
+
+	# update() calls upload()
+
 	def testUpdate_callsUploadWhenScheduled(self):
 		global time_value
 		global dl_upload_called
 		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_upload_period_sec
 		dl_upload_called = False
 		self.dl._time = fake_time
-		self.dl.sch.tasks[1].fp = fake_dl_upload
+		self.dl.sch.tasks[2].fp = fake_dl_upload
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(True, dl_upload_called)
@@ -325,10 +348,12 @@ class DataLoggerTestCase(unittest.TestCase):
 	def testUpdate_doesNotCallUploadWhenNotScheduled(self):
 		global dl_upload_called
 		dl_upload_called = False
-		self.dl.sch.tasks[1].fp = fake_dl_upload
+		self.dl.sch.tasks[2].fp = fake_dl_upload
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(False, dl_upload_called)
+
+	# update() calls poll()
 
 	def testUpdate_callsPollWhenScheduled(self):
 		global time_value
@@ -336,8 +361,8 @@ class DataLoggerTestCase(unittest.TestCase):
 		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_poll_period_sec
 		dl_poll_called = False
 		self.dl._time = fake_time
-		self.dl.sch.tasks[1].fp = fake_dl_upload # also fake upload as the scheduling period can be the same as for poll
-		self.dl.sch.tasks[2].fp = fake_dl_poll
+		self.dl.sch.tasks[2].fp = fake_dl_upload # also fake upload as the scheduling period can be the same as for poll
+		self.dl.sch.tasks[3].fp = fake_dl_poll
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(True, dl_poll_called)
@@ -345,10 +370,12 @@ class DataLoggerTestCase(unittest.TestCase):
 	def testUpdate_doesNotCallPollWhenNotScheduled(self):
 		global dl_poll_called
 		dl_poll_called = False
-		self.dl.sch.tasks[2].fp = fake_dl_poll
+		self.dl.sch.tasks[3].fp = fake_dl_poll
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(False, dl_poll_called)
+
+	# update() calls sched.update()
 
 	def testUpdate_callsSchedUpdateWhenScheduled(self):
 		global time_value

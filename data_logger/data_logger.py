@@ -30,6 +30,10 @@ class DataLogger():
 		delay = 0
 		self.sch.add(self.get_data, period, delay)
 
+		period = self.config.data_inputs_storage_period_sec
+		delay = 0
+		self.sch.add(self.save_data, period, delay)
+
 		period = self.config.server_upload_period_sec
 		delay = 0
 		self.sch.add(self.upload, period, delay)
