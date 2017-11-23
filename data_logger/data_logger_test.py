@@ -44,14 +44,19 @@ def fake_st_read_oldest():
 	return st_read_oldest_value
 
 dl_build_data_upload_request_called = False
+dl_build_data_upload_request_value = None
 def fake_dl_build_data_upload_request():
 	global dl_build_data_upload_request_called
 	dl_build_data_upload_request_called = True
+	return dl_build_data_upload_request_value
 
 ds_upload_called = False
+ds_upload_arg = None
 def fake_ds_upload(body):
 	global ds_upload_called
+	global ds_upload_arg
 	ds_upload_called = True
+	ds_upload_arg = body
 
 dl_upload_called = False
 def fake_dl_upload():
@@ -207,7 +212,10 @@ class DataLoggerTestCase(unittest.TestCase):
 
 	def testUpload_callsBuildDataUploadRequest(self):
 		global dl_build_data_upload_request_called
+		global dl_build_data_upload_request_value
+		ur = data_upload_req.DataUploadRequest(self.expectedCfg.system_name)
 		dl_build_data_upload_request_called = False
+		dl_build_data_upload_request_value = ur
 		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
 		self.dl.upload()
 		self.assertEqual(True, dl_build_data_upload_request_called)
@@ -219,6 +227,17 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.data_server.upload = fake_ds_upload
 		self.dl.upload()
 		self.assertEqual(True, ds_upload_called)
+
+	def testUpload_callsDataServerUploadWithDataUploadRequestTransformedToJSONReturnedByBuildDataUploadRequest(self):
+		global dl_build_data_upload_request_value
+		global ds_upload_arg
+		ur = data_upload_req.DataUploadRequest(self.expectedCfg.system_name)
+		dl_build_data_upload_request_value = ur
+		ds_upload_arg = None
+		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
+		self.dl.data_server.upload = fake_ds_upload
+		self.dl.upload()
+		self.assertEqual(dl_build_data_upload_request_value.to_json(), ds_upload_arg)
 
 	#
 	# update()

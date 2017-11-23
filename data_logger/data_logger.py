@@ -75,9 +75,8 @@ class DataLogger():
 		return ur
 
 	def upload(self):
-		self._build_data_upload_request()
-		body = {}
-		self.data_server.upload(body)
+		ur = self._build_data_upload_request()
+		self.data_server.upload(ur.to_json())
 		# FIXME check return value of upload
 		# FIXME on success, delete serialized version of data_record from data_store
 		return
