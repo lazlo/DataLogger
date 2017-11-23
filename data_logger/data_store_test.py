@@ -37,48 +37,73 @@ class DataStoreTestCase(unittest.TestCase):
 	def testInit_dataRecordsIsEmpty(self):
 		self.assertEqual(True, len(self.ds.data_records) == 0)
 
+	#
+	# save()
+	#
+
 	def testSave_createsFileInDataDir(self):
-		self.ds.save("record23")
-		self.assertEqual(True, os.path.exists(self.expectedFile))
-		os.remove(self.expectedFile)
+		self.ds.save()
+		try:
+			self.assertEqual(True, os.path.exists(self.expectedFile))
+		finally:
+			os.remove(self.expectedFile)
+
+	def testSave_clearsDataRecords(self):
+		self.ds.data_records.append("x1")
+		self.ds.data_records.append("x2")
+		self.ds.data_records.append("x3")
+		self.ds.save()
+		try:
+			self.assertEqual(0, len(self.ds.data_records))
+		finally:
+			os.remove(self.expectedFile)
+
+	def testSave_writesDataRecordsToFileOneLineEach(self):
+		self.ds.data_records.append("this")
+		self.ds.data_records.append("is")
+		self.ds.data_records.append("a")
+		self.ds.data_records.append("test")
+		self.ds.save()
+		try:
+			self.assertEqual(["this\n", "is\n", "a\n", "test\n"], open(self.expectedFile).readlines())
+		finally:
+			os.remove(self.expectedFile)
 
 	def testSave_appendsToFileInDataDir(self):
-		self.ds.save("record1") # create file with one line
-		self.ds.save("record2") # append to file
+		self.ds.data_records.append("record1")
+		self.ds.save() # create file with one line
+		self.ds.data_records.append("record2")
+		self.ds.save() # append to file
 		try:
 			self.assertEqual(2, len(open(self.expectedFile).readlines()))
 		finally:
 			os.remove(self.expectedFile)
-	def testSave_wrtiesArgumentAsLine(self):
-		expectedLine = "some-record"
-		self.ds.save(expectedLine)
-		try:
-			self.assertEqual(expectedLine, open(self.expectedFile).readlines()[0].rstrip())
-		finally:
-			os.remove(self.expectedFile)
 
 	def testRecords_returnsNumberOfLines(self):
-		self.ds.save("foo")
-		self.ds.save("bar")
-		self.ds.save("blub")
+		self.ds.data_records.append("foo")
+		self.ds.data_records.append("bar")
+		self.ds.data_records.append("blub")
+		self.ds.save()
 		try:
 			self.assertEqual(3, self.ds.records())
 		finally:
 			os.remove(self.expectedFile)
 
 	def testReadOldest_returnsFirstLine(self):
-		self.ds.save("first-line")
-		self.ds.save("second-line")
-		self.ds.save("third-line")
+		self.ds.data_records.append("first-line")
+		self.ds.data_records.append("second-line")
+		self.ds.data_records.append("third-line")
+		self.ds.save()
 		try:
 			self.assertEqual("first-line", self.ds.read_oldest())
 		finally:
 			os.remove(self.expectedFile)
 
 	def testDropOldest_removesFirstLine(self):
-		self.ds.save("1st-line")
-		self.ds.save("2nd-line")
-		self.ds.save("3rd-line")
+		self.ds.data_records.append("1st-line")
+		self.ds.data_records.append("2nd-line")
+		self.ds.data_records.append("3rd-line")
+		self.ds.save()
 		self.ds.drop_oldest()
 		try:
 			self.assertEqual(2, self.ds.records())

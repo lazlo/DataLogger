@@ -72,12 +72,9 @@ def fake_dl_poll():
 #
 
 st_save_called = False
-st_save_arg_line = None
-def fake_st_save(line):
+def fake_st_save():
 	global st_save_called
-	global st_save_arg_line
 	st_save_called = True
-	st_save_arg_line = line
 
 st_read_oldest_called = False
 st_read_oldest_value = None

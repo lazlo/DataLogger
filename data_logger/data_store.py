@@ -11,7 +11,16 @@ class DataStore():
 		self.recordFile = os.path.join(self.data_dir, "foo.txt")
 		self.data_records = []
 
-	def save(self, line):
+	def save(self):
+		f = open(self.recordFile, "a")
+		for dr in self.data_records:
+			f.write("%s\n" % dr)
+		f.close()
+		# reset data_records
+		self.data_records = []
+		return
+
+	def save_old(self, line):
 		f = open(self.recordFile, "a")
 		f.write("%s\n" % line)
 		f.close()
