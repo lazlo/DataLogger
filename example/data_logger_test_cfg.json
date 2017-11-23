@@ -7,6 +7,7 @@
 	"server_poll_period_sec":		1,
 	"data_dir":				"test-datadir",
 	"data_inputs_sample_period_sec":	1,
+	"data_inputs_storage_period_sec":	5,
 	"data_inputs":		[
 		{"name": "Hatch 1 Lock",	"class": "Pin"},
 		{"name": "Hatch 2 Lock",	"class": "Pin"},
