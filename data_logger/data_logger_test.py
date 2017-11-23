@@ -11,9 +11,22 @@ import data_input
 import data_record
 import data_upload_req
 
+#
+# Time and Scheduler related fakes
+#
+
 time_value = None
 def fake_time():
 	return time_value
+
+sch_update_called = False
+def fake_sch_update():
+	global sch_update_called
+	sch_update_called = True
+
+#
+# DataInput fakes
+#
 
 di_get_data_called = False
 di_get_data_called_ntimes = 0
@@ -23,10 +36,35 @@ def fake_di_get_data():
 	di_get_data_called = True
 	di_get_data_called_ntimes += 1
 
+#
+# DataLogger fakes
+#
+
 dl_get_data_called = False
 def fake_dl_get_data():
 	global dl_get_data_called
 	dl_get_data_called = True
+
+dl_build_data_upload_request_called = False
+dl_build_data_upload_request_value = None
+def fake_dl_build_data_upload_request():
+	global dl_build_data_upload_request_called
+	dl_build_data_upload_request_called = True
+	return dl_build_data_upload_request_value
+
+dl_upload_called = False
+def fake_dl_upload():
+	global dl_upload_called
+	dl_upload_called = True
+
+dl_poll_called = False
+def fake_dl_poll():
+	global dl_poll_called
+	dl_poll_called = True
+
+#
+# DataStore fakes
+#
 
 st_save_called = False
 st_save_arg_line = None
@@ -43,12 +81,9 @@ def fake_st_read_oldest():
 	st_read_oldest_called = True
 	return st_read_oldest_value
 
-dl_build_data_upload_request_called = False
-dl_build_data_upload_request_value = None
-def fake_dl_build_data_upload_request():
-	global dl_build_data_upload_request_called
-	dl_build_data_upload_request_called = True
-	return dl_build_data_upload_request_value
+#
+# DataServer fakes
+#
 
 ds_upload_called = False
 ds_upload_arg = None
@@ -57,21 +92,6 @@ def fake_ds_upload(body):
 	global ds_upload_arg
 	ds_upload_called = True
 	ds_upload_arg = body
-
-dl_upload_called = False
-def fake_dl_upload():
-	global dl_upload_called
-	dl_upload_called = True
-
-dl_poll_called = False
-def fake_dl_poll():
-	global dl_poll_called
-	dl_poll_called = True
-
-sch_update_called = False
-def fake_sch_update():
-	global sch_update_called
-	sch_update_called = True
 
 class DataLoggerTestCase(unittest.TestCase):
 
