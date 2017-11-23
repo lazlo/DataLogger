@@ -31,6 +31,12 @@ class DataStoreTestCase(unittest.TestCase):
 	def testInit_dataDirIsSet(self):
 		self.assertEqual(self.expectedDataDir, self.ds.data_dir)
 
+	def testInit_dataRecordsIsOfTypeList(self):
+		self.assertEqual(True, isinstance(self.ds.data_records, list))
+
+	def testInit_dataRecordsIsEmpty(self):
+		self.assertEqual(True, len(self.ds.data_records) == 0)
+
 	def testSave_createsFileInDataDir(self):
 		self.ds.save("record23")
 		self.assertEqual(True, os.path.exists(self.expectedFile))

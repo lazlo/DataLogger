@@ -9,6 +9,7 @@ class DataStore():
 			raise IOError("Permission denied: \"%s\"" % data_dir)
 		self.data_dir = data_dir
 		self.recordFile = os.path.join(self.data_dir, "foo.txt")
+		self.data_records = []
 
 	def save(self, line):
 		f = open(self.recordFile, "a")
