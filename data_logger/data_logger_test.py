@@ -207,6 +207,17 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.assertEqual(expected, st_save_arg_line)
 
 	#
+	# save_data()
+	#
+
+	def testSaveData_callsDataStoreSave(self):
+		global st_save_called
+		st_save_called = False
+		self.dl.data_store.save = fake_st_save
+		self.dl.save_data()
+		self.assertEqual(True, st_save_called)
+
+	#
 	# _build_data_upload_request()
 	#
 

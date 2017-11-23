@@ -67,6 +67,9 @@ class DataLogger():
 		self.data_store.data_records.append(rec)
 		self.data_store.save(json.dumps(rec.__dict__))
 
+	def save_data(self):
+		self.data_store.save("fixme")
+
 	def _build_data_upload_request(self):
 		ur = data_upload_req.DataUploadRequest(self.config.system_name)
 		oldest_str = self.data_store.read_oldest()
