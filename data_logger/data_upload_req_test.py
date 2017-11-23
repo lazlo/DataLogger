@@ -1,7 +1,8 @@
 import unittest
 import json
-
+import custom_json
 import data_upload_req
+import data_record
 
 class DataUploadRequestTestCase(unittest.TestCase):
 
@@ -17,3 +18,10 @@ class DataUploadRequestTestCase(unittest.TestCase):
 
 	def testToJSON(self):
 		self.assertEqual(json.dumps(self.req.__dict__), self.req.to_json())
+
+	def testToJSON_worksOnRecordsToo(self):
+		self.req.records.append(data_record.DataRecord())
+		self.req.records.append(data_record.DataRecord())
+		self.req.records.append(data_record.DataRecord())
+		expected = json.dumps(self.req.__dict__, cls=custom_json.CustomJSONEncoder)
+		self.assertEqual(expected, self.req.to_json())

@@ -1,4 +1,5 @@
 import json
+import custom_json
 
 class DataUploadRequest():
 	def __init__(self, logger_name):
@@ -6,4 +7,4 @@ class DataUploadRequest():
 		self.records = []
 
 	def to_json(self):
-		return json.dumps(self.__dict__)
+		return json.dumps(self.__dict__, cls=custom_json.CustomJSONEncoder)
