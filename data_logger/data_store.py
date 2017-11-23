@@ -14,16 +14,11 @@ class DataStore():
 	def save(self):
 		f = open(self.recordFile, "a")
 		for dr in self.data_records:
-			f.write("%s\n" % dr)
+			f.write("%s\n" % dr.to_json())
 		f.close()
 		# reset data_records
 		self.data_records = []
 		return
-
-	def save_old(self, line):
-		f = open(self.recordFile, "a")
-		f.write("%s\n" % line)
-		f.close()
 
 	def records(self):
 		return len(open(self.recordFile).readlines())
