@@ -24,9 +24,11 @@ class DataServer():
 			self.httpconn = self._create_http_conn()
 			self.httpconn.request(self.req_method, self.path, body, self.req_headers)
 			res = self.httpconn.getresponse()
+			# check for HTTP error
 			if res.status != httplib.OK:
 				raise Exception(res.status)
 			json_res = json.loads(res.read())
+			# check for database server error
 			if json_res["IsError"]:
 				raise Exception(json_res["Message"])
 		except Exception as ex:
