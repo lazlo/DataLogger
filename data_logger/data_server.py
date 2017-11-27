@@ -22,7 +22,7 @@ class DataServer():
 		try:
 			self.httpconn = self._create_http_conn()
 			self.httpconn.request(self.req_method, self.path, body, self.req_headers)
-			# FIXME get response (via self.httpconn.getresponse()) and check .status and .reason
+			res = self.httpconn.getresponse()
 		except Exception as ex:
 			self.error = ex.message
 			return False
