@@ -76,6 +76,11 @@ def fake_st_save():
 	global st_save_called
 	st_save_called = True
 
+st_save_latest_called = False
+def fake_st_save_latest():
+	global st_save_latest_called
+	st_save_latest_called = True
+
 st_read_oldest_called = False
 st_read_oldest_value = None
 def fake_st_read_oldest():
@@ -187,12 +192,13 @@ class DataLoggerTestCase(unittest.TestCase):
 	# save_data()
 	#
 
-	def testSaveData_callsDataStoreSave(self):
-		global st_save_called
-		st_save_called = False
+	def testSaveData_callsDataStoreSaveLatest(self):
+		global st_save_latest_called
+		st_save_latest_called = False
 		self.dl.data_store.save = fake_st_save
+		self.dl.data_store.save_latest = fake_st_save_latest
 		self.dl.save_data()
-		self.assertEqual(True, st_save_called)
+		self.assertEqual(True, st_save_latest_called)
 
 	#
 	# _build_data_upload_request()

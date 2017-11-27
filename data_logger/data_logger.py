@@ -69,7 +69,7 @@ class DataLogger():
 		self.data_store.data_records.append(rec)
 
 	def save_data(self):
-		self.data_store.save()
+		self.data_store.save_latest()
 
 	def _build_data_upload_request(self):
 		ur = data_upload_req.DataUploadRequest(self.config.system_name)
