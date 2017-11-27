@@ -73,10 +73,9 @@ class DataLogger():
 
 	def _build_data_upload_request(self):
 		ur = data_upload_req.DataUploadRequest(self.config.system_name)
-		oldest_str = self.data_store.read_oldest()
-		oldest_obj = data_record.DataRecord.from_json(oldest_str)
-		rec = oldest_obj
-		ur.records.append(rec)
+		for json_rec in self.data_store.read():
+			rec = data_record.DataRecord.from_json(json_rec)
+			ur.records.append(rec)
 		return ur
 
 	def upload(self):

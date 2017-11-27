@@ -81,12 +81,12 @@ def fake_st_save_latest():
 	global st_save_latest_called
 	st_save_latest_called = True
 
-st_read_oldest_called = False
-st_read_oldest_value = None
-def fake_st_read_oldest():
-	global st_read_oldest_called
-	st_read_oldest_called = True
-	return st_read_oldest_value
+st_read_called = False
+st_read_value = None
+def fake_st_read():
+	global st_read_called
+	st_read_called = True
+	return st_read_value
 
 #
 # DataServer fakes
@@ -205,26 +205,26 @@ class DataLoggerTestCase(unittest.TestCase):
 	#
 
 	def testBuildDataUploadRequest_returnsDataUploadRequestObj(self):
-		self.dl.data_store.read_oldest = fake_st_read_oldest # fake DataStore.read_oldest() so no filesystem access is performed
+		self.dl.data_store.read = fake_st_read # fake DataStore.read() so no filesystem access is performed
 		self.assertEqual(True, isinstance(self.dl._build_data_upload_request(), data_upload_req.DataUploadRequest))
 
-	def testBuildDataUploadRequest_callsDataStoreReadOldest(self):
-		global st_read_oldest_called
-		global st_read_oldest_value
-		st_read_oldest_called = False
-		st_read_oldest_value = "{\"timestamp\": \"\", \"measurements\": \"\"}" # JSON string
-		self.dl.data_store.read_oldest = fake_st_read_oldest
+	def testBuildDataUploadRequest_callsDataStoreRead(self):
+		global st_read_called
+		global st_read_value
+		st_read_called = False
+		st_read_value = ["{\"timestamp\": \"\", \"measurements\": \"\"}", "{\"timestamp\": \"\", \"measurements\": \"\"}"] # list of JSON strings
+		self.dl.data_store.read = fake_st_read
 		self.dl._build_data_upload_request()
-		self.assertEqual(True, st_read_oldest_called)
+		self.assertEqual(True, st_read_called)
 
 	def testBuildDataUploadRequest_populatesRecords(self):
-		self.dl.data_store.read_oldest = fake_st_read_oldest # fake DataStore.read_oldest() so no filesystem access is performed
+		self.dl.data_store.read = fake_st_read # fake DataStore.read() so no filesystem access is performed
 		self.assertEqual(True, len(self.dl._build_data_upload_request().records) > 0)
 
 	def testBuildDataUploadRequest_recordsEntriesAreOfTypeDataRecord(self):
-		global st_read_oldest_value
-		st_read_oldest_value = "{\"timestamp\": \"\", \"measurements\": \"\"}" # JSON string
-		self.dl.data_store.read_oldest = fake_st_read_oldest # fake DataStore.read_oldest() so no filesystem access is performed
+		global st_read_value
+		st_read_value = ["{\"timestamp\": \"\", \"measurements\": \"\"}"] # list of JSON strings
+		self.dl.data_store.read = fake_st_read # fake DataStore.read() so no filesystem access is performed
 		self.assertEqual(True, isinstance(self.dl._build_data_upload_request().records[0], data_record.DataRecord))
 
 	#
@@ -244,7 +244,7 @@ class DataLoggerTestCase(unittest.TestCase):
 	def testUpload_callsDataServerUpload(self):
 		global ds_upload_called
 		ds_upload_called = False
-		self.dl.data_store.read_oldest = fake_st_read_oldest
+		self.dl.data_store.read = fake_st_read
 		self.dl.data_server.upload = fake_ds_upload
 		self.dl.upload()
 		self.assertEqual(True, ds_upload_called)
@@ -269,7 +269,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		time_value = self.expectedStartupTimeSec + self.dl.sch_update_period_sec
 		expected = time_value + self.dl.sch_update_period_sec
 		self.dl._time = fake_time
-		self.dl.sch.tasks[2].fp = fake_dl_upload # fake upload so no file access is performed via _build_data_upload_request() and DataStore.read_oldest()
+		self.dl.sch.tasks[2].fp = fake_dl_upload # fake upload so no file access is performed via _build_data_upload_request() and DataStore.read()
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.update()
 		self.assertEqual(expected, self.dl.next_sched_update_time_sec)
