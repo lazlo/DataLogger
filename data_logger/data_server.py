@@ -1,5 +1,6 @@
 import httplib
 import urlparse
+import json
 
 class DataServer():
 
@@ -25,7 +26,9 @@ class DataServer():
 			res = self.httpconn.getresponse()
 			if res.status != httplib.OK:
 				raise Exception(res.status)
-			data = res.read()
+			json_res = json.loads(res.read())
+			if json_res["IsError"]:
+				raise Exception()
 		except Exception as ex:
 			self.error = ex.message
 			return False
