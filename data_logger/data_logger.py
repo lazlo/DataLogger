@@ -63,6 +63,7 @@ class DataLogger():
 			return di
 
 	def get_data(self):
+		self.log.debug("IN")
 		rec = data_record.DataRecord()
 		for di_name in self.config.data_record_format:
 			di = self._get_data_input(di_name)
@@ -71,6 +72,7 @@ class DataLogger():
 		self.data_store.data_records.append(rec)
 
 	def save_data(self):
+		self.log.debug("IN")
 		self.data_store.save_latest()
 
 	def _build_data_upload_request(self):
@@ -81,6 +83,7 @@ class DataLogger():
 		return ur
 
 	def upload(self):
+		self.log.debug("IN")
 		ur = self._build_data_upload_request()
 		upload_ok = self.data_server.upload(ur.to_json())
 		if not upload_ok:
