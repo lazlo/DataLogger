@@ -3,13 +3,15 @@ import json
 
 class DataStore():
 
+	DEFAULT_FILENAME = "store.txt"
+
 	def __init__(self, data_dir):
 		if not os.path.exists(data_dir):
 			raise IOError("No such file or directory: \"%s\"" % data_dir)
 		if not os.access(data_dir, os.W_OK):
 			raise IOError("Permission denied: \"%s\"" % data_dir)
 		self.data_dir = data_dir
-		self.recordFile = os.path.join(self.data_dir, "foo.txt")
+		self.recordFile = os.path.join(self.data_dir, self.DEFAULT_FILENAME)
 		self.data_records = []
 
 	def save(self):

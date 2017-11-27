@@ -17,7 +17,7 @@ class DataStoreTestCase(unittest.TestCase):
 
 	def setUp(self):
 		self.expectedDataDir = "test-datadir"
-		self.expectedFile = os.path.join(self.expectedDataDir, "foo.txt")
+		self.expectedFile = os.path.join(self.expectedDataDir, data_store.DataStore.DEFAULT_FILENAME)
 		os.mkdir(self.expectedDataDir)
 		self.ds = data_store.DataStore(self.expectedDataDir)
 
