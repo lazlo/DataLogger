@@ -23,6 +23,8 @@ class DataServer():
 			self.httpconn = self._create_http_conn()
 			self.httpconn.request(self.req_method, self.path, body, self.req_headers)
 			res = self.httpconn.getresponse()
+			if res.status != httplib.OK:
+				raise Exception(res.status)
 		except Exception as ex:
 			self.error = ex.message
 			return False

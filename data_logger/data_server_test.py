@@ -10,13 +10,19 @@ def fake_create_http_conn():
 	create_http_conn_called = True
 	return create_http_conn_value
 
+class FakeHTTPResponse():
+
+	def __init__(self):
+		self.status = None
+		self.reason = None
+
 class FakeHTTPConnection():
 
 	def __init__(self, host, port):
 		self.request_called = False
 		self.request_exception = None
 		self.getresponse_called = False
-		self.getresponse_value = None
+		self.getresponse_value = FakeHTTPResponse()
 		self.host = host
 		self.port = port
 
@@ -129,8 +135,14 @@ class DataServerTestCase(unittest.TestCase):
 		self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(True, create_http_conn_value.getresponse_called)
 
+	def testUpload_returnFalseWhenGetResponseStatusIsNot200(self):
+		self._mock_http_conn_via_create_http_conn()
+		create_http_conn_value.getresponse_value.status = 404
+		self.assertEqual(False, self.srv.upload(self.expectedRequestBody))
+
 	def testUpload_returnsTrue(self):
 		self._mock_http_conn_via_create_http_conn()
+		create_http_conn_value.getresponse_value.status = 200
 		rv = self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(True, rv)
 
