@@ -2,6 +2,7 @@ import unittest
 
 import data_server
 import httplib
+import socket
 
 create_http_conn_called = False
 create_http_conn_value = None
@@ -135,6 +136,12 @@ class DataServerTestCase(unittest.TestCase):
 		self._mock_http_conn_via_create_http_conn()
 		self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(self.expectedRequestHeaders, create_http_conn_value.request_headers)
+
+	def testUpload_setsErrorWhenRequestRaisesSocketError(self):
+		raise_exception_on_request = socket.error("Connection refused")
+		self._mock_http_conn_via_create_http_conn(raise_exception_on_request)
+		self.srv.upload(self.expectedRequestBody)
+		self.assertEqual("Socket Error: Connection refused", self.srv.error)
 
 	def testUpload_callsGetResponse(self):
 		self._mock_http_conn_via_create_http_conn()

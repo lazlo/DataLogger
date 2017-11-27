@@ -1,5 +1,6 @@
 import httplib
 import urlparse
+import socket
 import json
 
 class DataServerError(Exception):
@@ -39,6 +40,9 @@ class DataServer():
 			return False
 		except DataServerError as ex:
 			self.error = "Server Error: %s" % ex.message
+			return False
+		except socket.error as ex:
+			self.error = "Socket Error: %s" % ex.message
 			return False
 		except Exception as ex:
 			self.error = ex.message
