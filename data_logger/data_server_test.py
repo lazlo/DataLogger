@@ -15,6 +15,12 @@ class FakeHTTPResponse():
 	def __init__(self):
 		self.status = None
 		self.reason = None
+		self.read_called = False
+		self.read_value = None
+
+	def read(self):
+		self.read_called = True
+		return self.read_value
 
 class FakeHTTPConnection():
 
@@ -139,6 +145,12 @@ class DataServerTestCase(unittest.TestCase):
 		self._mock_http_conn_via_create_http_conn()
 		create_http_conn_value.getresponse_value.status = 404
 		self.assertEqual(False, self.srv.upload(self.expectedRequestBody))
+
+	def testUpload_callsReadOnResponse(self):
+		self._mock_http_conn_via_create_http_conn()
+		create_http_conn_value.getresponse_value.status = 200
+		self.srv.upload(self.expectedRequestBody)
+		self.assertEqual(True, create_http_conn_value.getresponse_value.read_called)
 
 	def testUpload_returnsTrue(self):
 		self._mock_http_conn_via_create_http_conn()

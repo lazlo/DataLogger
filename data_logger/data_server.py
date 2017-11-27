@@ -25,6 +25,7 @@ class DataServer():
 			res = self.httpconn.getresponse()
 			if res.status != httplib.OK:
 				raise Exception(res.status)
+			data = res.read()
 		except Exception as ex:
 			self.error = ex.message
 			return False
