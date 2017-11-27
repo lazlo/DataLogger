@@ -178,3 +178,24 @@ class DataStoreTestCase(unittest.TestCase):
 			self.assertEqual(9, self.ds.records())
 		finally:
 			os.remove(self.expectedFile)
+
+	def testDropBy_removesMultipleLinesFromFileOnMatch(self):
+		t = time.gmtime()
+		arg_filter_value = ["1983-10-10T12:23:42", "1983-10-10T12:23:53"]
+		for i in range(0, 10):
+			t = time.gmtime()
+			# this is the special record we want to delete
+			if i == 5:
+				ts = arg_filter_value[0]
+			elif i == 6:
+				ts = arg_filter_value[1]
+			else:
+				ts = time.strftime("%Y-%m-%dT%H:%M:%S", t)
+			dr = data_record.DataRecord(ts)
+			self.ds.data_records.append(dr)
+		self.ds.save()
+		try:
+			self.ds.drop_by("timestamp", arg_filter_value)
+			self.assertEqual(8, self.ds.records())
+		finally:
+			os.remove(self.expectedFile)

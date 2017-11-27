@@ -36,6 +36,8 @@ class DataStore():
 		return len(open(self.recordFile).readlines())
 
 	def drop_by(self, filter_key, filter_value):
+		if not type(filter_value) is list:
+			filter_value = [filter_value]
 		lines_in = []
 		lines_out = []
 		# get all lines from file
@@ -46,7 +48,7 @@ class DataStore():
 		# filter out line we want to drop
 		for line in lines_in:
 			rec = json.loads(line)
-			if rec[filter_key] == filter_value:
+			if rec[filter_key] in filter_value:
 				continue
 			lines_out.append(line)
 		# write lines back to file
