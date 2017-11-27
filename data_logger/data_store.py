@@ -1,4 +1,5 @@
 import os
+import json
 
 class DataStore():
 
@@ -33,3 +34,23 @@ class DataStore():
 
 	def records(self):
 		return len(open(self.recordFile).readlines())
+
+	def drop_by(self, filter_key, filter_value):
+		lines_in = []
+		lines_out = []
+		# get all lines from file
+		f = open(self.recordFile)
+		for line in f.readlines():
+			lines_in.append(line.rstrip())
+		f.close()
+		# filter out line we want to drop
+		for line in lines_in:
+			rec = json.loads(line)
+			if rec[filter_key] == filter_value:
+				continue
+			lines_out.append(line)
+		# write lines back to file
+		f = open(self.recordFile, "w")
+		for line in lines_out:
+			f.write("%s\n" % line)
+		f.close()

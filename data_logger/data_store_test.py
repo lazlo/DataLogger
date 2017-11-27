@@ -1,5 +1,6 @@
 import unittest
 import os
+import time
 
 import data_store
 import data_record
@@ -142,5 +143,38 @@ class DataStoreTestCase(unittest.TestCase):
 		self.ds.save()
 		try:
 			self.assertEqual(expected, self.ds.read())
+		finally:
+			os.remove(self.expectedFile)
+
+	#
+	# drop_by()
+	#
+
+	def testDropBy_doesNotChangeFileOnMismatch(self):
+		for i in range(0, 10):
+			self.ds.data_records.append(data_record.DataRecord())
+		self.ds.save()
+		try:
+			self.ds.drop_by("timestamp", "foo")
+			self.assertEqual(10, self.ds.records())
+		finally:
+			os.remove(self.expectedFile)
+
+	def testDropBy_removesLineFromFileOnMatch(self):
+		t = time.gmtime()
+		arg_filter_value = "1983-10-10T12:23:42"
+		for i in range(0, 10):
+			t = time.gmtime()
+			# this is the special record we want to delete
+			if i == 5:
+				ts = arg_filter_value
+			else:
+				ts = time.strftime("%Y-%m-%dT%H:%M:%S", t)
+			dr = data_record.DataRecord(ts)
+			self.ds.data_records.append(dr)
+		self.ds.save()
+		try:
+			self.ds.drop_by("timestamp", arg_filter_value)
+			self.assertEqual(9, self.ds.records())
 		finally:
 			os.remove(self.expectedFile)
