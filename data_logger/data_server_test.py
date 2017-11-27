@@ -158,6 +158,13 @@ class DataServerTestCase(unittest.TestCase):
 		create_http_conn_value.getresponse_value.read_value = "{...invalid JSON}"
 		self.assertEqual(False, self.srv.upload(self.expectedRequestBody))
 
+	def testUpload_setsErrorWhenResponseDataIsInvalidJSON(self):
+		self._mock_http_conn_via_create_http_conn()
+		create_http_conn_value.getresponse_value.status = 200
+		create_http_conn_value.getresponse_value.read_value = "{...invalid JSON}"
+		self.srv.upload(self.expectedRequestBody)
+		self.assertEqual(True, self.srv.error.startswith("JSON Error"))
+
 	def testUpload_returnsFalseWhenResponseDataIsErrorIsTrue(self):
 		self._mock_http_conn_via_create_http_conn()
 		create_http_conn_value.getresponse_value.status = 200

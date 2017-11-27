@@ -31,6 +31,9 @@ class DataServer():
 			# check for database server error
 			if json_res["IsError"]:
 				raise Exception(json_res["Message"])
+		except ValueError as ex:
+			self.error = "JSON Error: %s" % ex.message
+			return False
 		except Exception as ex:
 			self.error = ex.message
 			return False
