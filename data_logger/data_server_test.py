@@ -172,10 +172,11 @@ class DataServerTestCase(unittest.TestCase):
 		self.assertEqual(False, self.srv.upload(self.expectedRequestBody))
 
 	def testUpload_setsErrorWhenResponseDataIsErrorIsTrue(self):
-		expected = "Some database error"
+		errmsg = "Some database error"
+		expected = "Server Error: %s" % errmsg
 		self._mock_http_conn_via_create_http_conn()
 		create_http_conn_value.getresponse_value.status = 200
-		create_http_conn_value.getresponse_value.read_value = "{\"Message\":\"%s\", \"IsError\":true}" % expected
+		create_http_conn_value.getresponse_value.read_value = "{\"Message\":\"%s\", \"IsError\":true}" % errmsg
 		self.srv.upload(self.expectedRequestBody)
 		self.assertEqual(expected, self.srv.error)
 

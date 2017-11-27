@@ -2,6 +2,9 @@ import httplib
 import urlparse
 import json
 
+class DataServerError(Exception):
+	pass
+
 class DataServer():
 
 	def __init__(self, addr, user, password):
@@ -30,9 +33,12 @@ class DataServer():
 			json_res = json.loads(res.read())
 			# check for database server error
 			if json_res["IsError"]:
-				raise Exception(json_res["Message"])
+				raise DataServerError(json_res["Message"])
 		except ValueError as ex:
 			self.error = "JSON Error: %s" % ex.message
+			return False
+		except DataServerError as ex:
+			self.error = "Server Error: %s" % ex.message
 			return False
 		except Exception as ex:
 			self.error = ex.message
