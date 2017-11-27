@@ -89,9 +89,12 @@ def fake_st_read():
 	return st_read_value
 
 st_drop_by_called = False
+st_drop_by_args = []
 def fake_st_drop_by(filter_key, filter_value):
 	global st_drop_by_called
 	st_drop_by_called = True
+	st_drop_by_args.append(filter_key)
+	st_drop_by_args.append(filter_value)
 
 #
 # DataServer fakes
@@ -299,6 +302,25 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.data_store.drop_by = fake_st_drop_by
 		self.dl.upload()
 		self.assertEqual(False, st_drop_by_called)
+
+	def testUpload_callsDataStoreDropByWithTimestampOfDataRecordsFromUploadRequest(self):
+		global dl_build_data_upload_request_value
+		global ds_upload_value
+		global st_drop_by_args
+		expected_filter_values = []
+		ur = data_upload_req.DataUploadRequest(self.expectedCfg.system_name)
+		for i in range(0, 4):
+			dr = data_record.DataRecord()
+			ur.records.append(dr)
+			expected_filter_values.append(dr.timestamp)
+		dl_build_data_upload_request_value = ur
+		ds_upload_value = True
+		st_drop_by_args = []
+		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
+		self.dl.data_server.upload = fake_ds_upload
+		self.dl.data_store.drop_by = fake_st_drop_by
+		self.dl.upload()
+		self.assertEqual(["timestamp", expected_filter_values], st_drop_by_args)
 
 	#
 	# update()

@@ -83,8 +83,11 @@ class DataLogger():
 		upload_ok = self.data_server.upload(ur.to_json())
 		if not upload_ok:
 			return
-		# FIXME drop records that have been transmitted in previous request
-		self.data_store.drop_by("timestamp", "foo")
+		filter_key = "timestamp"
+		filter_value = []
+		for dr in ur.records:
+			filter_value.append(dr.timestamp)
+		self.data_store.drop_by(filter_key, filter_value)
 
 	def poll(self):
 		return
