@@ -98,6 +98,24 @@ class DataStoreTestCase(unittest.TestCase):
 		finally:
 			os.remove(self.expectedFile)
 
+	#
+	# save_latest()
+	#
+
+	def testSaveLatest_onlyWritesLatestRecordToFile(self):
+		expected = []
+		for i in range(0, 10):
+			dr = data_record.DataRecord()
+			self.ds.data_records.append(dr)
+			if i == 9:
+				expected.append(dr.to_json())
+		try:
+			self.ds.save_latest()
+			self.assertEqual(expected, read_file_lines(self.expectedFile))
+		finally:
+			if os.path.exists(self.expectedFile):
+				os.remove(self.expectedFile)
+
 	def testRecords_returnsNumberOfLines(self):
 		for i in range(0, 3):
 			self.ds.data_records.append(data_record.DataRecord())

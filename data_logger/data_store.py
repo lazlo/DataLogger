@@ -20,6 +20,11 @@ class DataStore():
 		self.data_records = []
 		return
 
+	def save_latest(self):
+		latest_record_only = self.data_records[-1:]
+		self.data_records = latest_record_only
+		self.save()
+
 	def records(self):
 		return len(open(self.recordFile).readlines())
 
