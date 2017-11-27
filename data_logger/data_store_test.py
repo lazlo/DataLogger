@@ -144,34 +144,3 @@ class DataStoreTestCase(unittest.TestCase):
 			self.assertEqual(expected, self.ds.read())
 		finally:
 			os.remove(self.expectedFile)
-
-	#
-	# read_oldest()
-	#
-
-	def testReadOldest_returnsFirstLine(self):
-		dr = data_record.DataRecord("magic-timestamp-used-for-this-test")
-		expected = dr.to_json()
-		self.ds.data_records.append(dr)
-		self.ds.data_records.append(data_record.DataRecord())
-		self.ds.data_records.append(data_record.DataRecord())
-		self.ds.save()
-		try:
-			# FIXME - make sure read oldest() will strip new-line characters
-			self.assertEqual("%s" % expected, self.ds.read_oldest())
-		finally:
-			os.remove(self.expectedFile)
-
-	#
-	# drop_oldest()
-	#
-
-	def testDropOldest_removesFirstLine(self):
-		for i in range(0, 3):
-			self.ds.data_records.append(data_record.DataRecord())
-		self.ds.save()
-		self.ds.drop_oldest()
-		try:
-			self.assertEqual(2, self.ds.records())
-		finally:
-			os.remove(self.expectedFile)
