@@ -80,10 +80,11 @@ class DataLogger():
 
 	def upload(self):
 		ur = self._build_data_upload_request()
-		self.data_server.upload(ur.to_json())
-		# FIXME check return value of upload
-		# FIXME on success, delete serialized version of data_record from data_store
-		return
+		upload_ok = self.data_server.upload(ur.to_json())
+		if not upload_ok:
+			return
+		# FIXME drop records that have been transmitted in previous request
+		self.data_store.drop_by("timestamp", "foo")
 
 	def poll(self):
 		return

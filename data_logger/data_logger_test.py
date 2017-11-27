@@ -88,17 +88,24 @@ def fake_st_read():
 	st_read_called = True
 	return st_read_value
 
+st_drop_by_called = False
+def fake_st_drop_by(filter_key, filter_value):
+	global st_drop_by_called
+	st_drop_by_called = True
+
 #
 # DataServer fakes
 #
 
 ds_upload_called = False
 ds_upload_arg = None
+ds_upload_value = None
 def fake_ds_upload(body):
 	global ds_upload_called
 	global ds_upload_arg
 	ds_upload_called = True
 	ds_upload_arg = body
+	return ds_upload_value
 
 class DataLoggerTestCase(unittest.TestCase):
 
@@ -237,6 +244,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		ur = data_upload_req.DataUploadRequest(self.expectedCfg.system_name)
 		dl_build_data_upload_request_called = False
 		dl_build_data_upload_request_value = ur
+		self.dl.data_store.drop_by = fake_st_drop_by
 		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
 		self.dl.upload()
 		self.assertEqual(True, dl_build_data_upload_request_called)
@@ -244,6 +252,7 @@ class DataLoggerTestCase(unittest.TestCase):
 	def testUpload_callsDataServerUpload(self):
 		global ds_upload_called
 		ds_upload_called = False
+		self.dl.data_store.drop_by = fake_st_drop_by
 		self.dl.data_store.read = fake_st_read
 		self.dl.data_server.upload = fake_ds_upload
 		self.dl.upload()
@@ -255,10 +264,41 @@ class DataLoggerTestCase(unittest.TestCase):
 		ur = data_upload_req.DataUploadRequest(self.expectedCfg.system_name)
 		dl_build_data_upload_request_value = ur
 		ds_upload_arg = None
+		self.dl.data_store.drop_by = fake_st_drop_by
 		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
 		self.dl.data_server.upload = fake_ds_upload
 		self.dl.upload()
 		self.assertEqual(dl_build_data_upload_request_value.to_json(), ds_upload_arg)
+
+	# upload() calls DataStore.drop_by()
+
+	def testUpload_callsDataStoreDropByWhenDataServerUploadReturnsTrue(self):
+		global dl_build_data_upload_request_value
+		global ds_upload_value
+		global st_drop_by_called
+		ur = data_upload_req.DataUploadRequest(self.expectedCfg.system_name)
+		dl_build_data_upload_request_value = ur
+		ds_upload_value = True
+		st_drop_by_called = False
+		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
+		self.dl.data_server.upload = fake_ds_upload
+		self.dl.data_store.drop_by = fake_st_drop_by
+		self.dl.upload()
+		self.assertEqual(True, st_drop_by_called)
+
+	def testUpload_doesNotCallDataStoreDropByWhenDataServerUploadReturnsFalse(self):
+		global dl_build_data_upload_request_value
+		global ds_upload_value
+		global st_drop_by_called
+		ur = data_upload_req.DataUploadRequest(self.expectedCfg.system_name)
+		dl_build_data_upload_request_value = ur
+		ds_upload_value = False
+		st_drop_by_called = False
+		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
+		self.dl.data_server.upload = fake_ds_upload
+		self.dl.data_store.drop_by = fake_st_drop_by
+		self.dl.upload()
+		self.assertEqual(False, st_drop_by_called)
 
 	#
 	# update()
