@@ -130,6 +130,22 @@ class DataStoreTestCase(unittest.TestCase):
 			os.remove(self.expectedFile)
 
 	#
+	# read()
+	#
+
+	def testRead_returnsFileContents(self):
+		expected = []
+		for i in range(0, 3):
+			dr = data_record.DataRecord()
+			self.ds.data_records.append(dr)
+			expected.append(dr.to_json())
+		self.ds.save()
+		try:
+			self.assertEqual(expected, self.ds.read())
+		finally:
+			os.remove(self.expectedFile)
+
+	#
 	# read_oldest()
 	#
 

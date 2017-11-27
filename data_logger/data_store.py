@@ -25,6 +25,12 @@ class DataStore():
 		self.data_records = latest_record_only
 		self.save()
 
+	def read(self):
+		rv = []
+		for line in open(self.recordFile).readlines():
+			rv.append(line.rstrip())
+		return rv
+
 	def records(self):
 		return len(open(self.recordFile).readlines())
 
