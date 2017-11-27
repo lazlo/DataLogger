@@ -28,7 +28,7 @@ class DataServer():
 				raise Exception(res.status)
 			json_res = json.loads(res.read())
 			if json_res["IsError"]:
-				raise Exception()
+				raise Exception(json_res["Message"])
 		except Exception as ex:
 			self.error = ex.message
 			return False
