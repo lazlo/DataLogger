@@ -116,6 +116,10 @@ class DataStoreTestCase(unittest.TestCase):
 			if os.path.exists(self.expectedFile):
 				os.remove(self.expectedFile)
 
+	#
+	# records()
+	#
+
 	def testRecords_returnsNumberOfLines(self):
 		for i in range(0, 3):
 			self.ds.data_records.append(data_record.DataRecord())
@@ -124,6 +128,10 @@ class DataStoreTestCase(unittest.TestCase):
 			self.assertEqual(3, self.ds.records())
 		finally:
 			os.remove(self.expectedFile)
+
+	#
+	# read_oldest()
+	#
 
 	def testReadOldest_returnsFirstLine(self):
 		dr = data_record.DataRecord("magic-timestamp-used-for-this-test")
@@ -137,6 +145,10 @@ class DataStoreTestCase(unittest.TestCase):
 			self.assertEqual("%s" % expected, self.ds.read_oldest())
 		finally:
 			os.remove(self.expectedFile)
+
+	#
+	# drop_oldest()
+	#
 
 	def testDropOldest_removesFirstLine(self):
 		for i in range(0, 3):
