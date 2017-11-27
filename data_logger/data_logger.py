@@ -7,12 +7,14 @@ import data_upload_req
 
 import time
 import json
+import logging
 
 class DataLogger():
 
 	DEFAULT_SCHED_UPDATE_PERIOD_SEC = 1
 
 	def __init__(self, config):
+		self.log = logging.getLogger()
 		self.startup_time_sec = self._time()
 		self.config = config
 		self.data_store = data_store.DataStore(self.config.data_dir)

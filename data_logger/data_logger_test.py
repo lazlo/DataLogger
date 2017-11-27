@@ -2,6 +2,7 @@ import unittest
 import os
 import time
 import json
+import logging
 
 import data_logger
 import config
@@ -126,6 +127,9 @@ class DataLoggerTestCase(unittest.TestCase):
 	#
 	# __ini__()
 	#
+
+	def testInit_logIsLoggerInstance(self):
+		self.assertEqual(True, isinstance(self.dl.log, logging.Logger))
 
 	def testInit_startupTimeSecIsSetToNow(self):
 		dl = data_logger.DataLogger(self.expectedCfg)
