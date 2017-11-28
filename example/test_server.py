@@ -2,13 +2,19 @@
 
 import BaseHTTPServer
 import SocketServer
+import json
 
 class DebugHTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 	def do_POST(self):
 		#print(self.headers)
 		#print(self.path)
-		print(self.rfile.read(int(self.headers["Content-Length"])))
+		req_body = self.rfile.read(int(self.headers["Content-Length"]))
+		try:
+			parsed = json.loads(req_body)
+			print(json.dumps(parsed, indent=4))
+		except Exception as ex:
+			print("Error: JSON decode failed with \"%s\" for:\n%s" % (ex.message, req_body))
 		self.send_response(200)
 		self.send_header("Content-type", "application/json")
 		self.end_headers()
