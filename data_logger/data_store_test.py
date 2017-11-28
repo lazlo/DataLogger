@@ -22,6 +22,8 @@ class DataStoreTestCase(unittest.TestCase):
 		self.ds = data_store.DataStore(self.expectedDataDir)
 
 	def tearDown(self):
+		if os.path.exists(self.expectedFile):
+			os.remove(self.expectedFile)
 		os.rmdir(self.expectedDataDir)
 
 	def testInit_raisesExceptionWhenDataDirDoesNotExist(self):
@@ -53,19 +55,13 @@ class DataStoreTestCase(unittest.TestCase):
 
 	def testSave_createsFileInDataDir(self):
 		self.ds.save()
-		try:
-			self.assertEqual(True, os.path.exists(self.expectedFile))
-		finally:
-			os.remove(self.expectedFile)
+		self.assertEqual(True, os.path.exists(self.expectedFile))
 
 	def testSave_clearsDataRecords(self):
 		for i in range(0, 3):
 			self.ds.data_records.append(data_record.DataRecord())
 		self.ds.save()
-		try:
-			self.assertEqual(0, len(self.ds.data_records))
-		finally:
-			os.remove(self.expectedFile)
+		self.assertEqual(0, len(self.ds.data_records))
 
 	def testSave_writesDataRecordsToFileOneLineEach(self):
 		expected = []
@@ -74,30 +70,21 @@ class DataStoreTestCase(unittest.TestCase):
 			expected.append("%s\n" % dr.to_json())
 			self.ds.data_records.append(dr)
 		self.ds.save()
-		try:
-			self.assertEqual(expected, open(self.expectedFile).readlines())
-		finally:
-			os.remove(self.expectedFile)
+		self.assertEqual(expected, open(self.expectedFile).readlines())
 
 	def testSave_appendsToFileInDataDir(self):
 		self.ds.data_records.append(data_record.DataRecord())
 		self.ds.save() # create file with one line
 		self.ds.data_records.append(data_record.DataRecord())
 		self.ds.save() # append to file
-		try:
-			self.assertEqual(2, len(open(self.expectedFile).readlines()))
-		finally:
-			os.remove(self.expectedFile)
+		self.assertEqual(2, len(open(self.expectedFile).readlines()))
 
 	def testSave_writesDataRecordAsJSONtoFile(self):
 		dr = data_record.DataRecord()
 		expected = dr.to_json()
 		self.ds.data_records.append(dr)
 		self.ds.save()
-		try:
-			self.assertEqual([expected], read_file_lines(self.expectedFile))
-		finally:
-			os.remove(self.expectedFile)
+		self.assertEqual([expected], read_file_lines(self.expectedFile))
 
 	#
 	# save_latest()
@@ -110,12 +97,8 @@ class DataStoreTestCase(unittest.TestCase):
 			self.ds.data_records.append(dr)
 			if i == 9:
 				expected.append(dr.to_json())
-		try:
-			self.ds.save_latest()
-			self.assertEqual(expected, read_file_lines(self.expectedFile))
-		finally:
-			if os.path.exists(self.expectedFile):
-				os.remove(self.expectedFile)
+		self.ds.save_latest()
+		self.assertEqual(expected, read_file_lines(self.expectedFile))
 
 	#
 	# records()
@@ -125,10 +108,7 @@ class DataStoreTestCase(unittest.TestCase):
 		for i in range(0, 3):
 			self.ds.data_records.append(data_record.DataRecord())
 		self.ds.save()
-		try:
-			self.assertEqual(3, self.ds.records())
-		finally:
-			os.remove(self.expectedFile)
+		self.assertEqual(3, self.ds.records())
 
 	#
 	# read()
@@ -141,10 +121,7 @@ class DataStoreTestCase(unittest.TestCase):
 			self.ds.data_records.append(dr)
 			expected.append(dr.to_json())
 		self.ds.save()
-		try:
-			self.assertEqual(expected, self.ds.read())
-		finally:
-			os.remove(self.expectedFile)
+		self.assertEqual(expected, self.ds.read())
 
 	#
 	# drop_by()
@@ -154,11 +131,8 @@ class DataStoreTestCase(unittest.TestCase):
 		for i in range(0, 10):
 			self.ds.data_records.append(data_record.DataRecord())
 		self.ds.save()
-		try:
-			self.ds.drop_by("timestamp", "foo")
-			self.assertEqual(10, self.ds.records())
-		finally:
-			os.remove(self.expectedFile)
+		self.ds.drop_by("timestamp", "foo")
+		self.assertEqual(10, self.ds.records())
 
 	def testDropBy_removesLineFromFileOnMatch(self):
 		t = time.gmtime()
@@ -173,11 +147,8 @@ class DataStoreTestCase(unittest.TestCase):
 			dr = data_record.DataRecord(ts)
 			self.ds.data_records.append(dr)
 		self.ds.save()
-		try:
-			self.ds.drop_by("timestamp", arg_filter_value)
-			self.assertEqual(9, self.ds.records())
-		finally:
-			os.remove(self.expectedFile)
+		self.ds.drop_by("timestamp", arg_filter_value)
+		self.assertEqual(9, self.ds.records())
 
 	def testDropBy_removesMultipleLinesFromFileOnMatch(self):
 		t = time.gmtime()
@@ -194,8 +165,5 @@ class DataStoreTestCase(unittest.TestCase):
 			dr = data_record.DataRecord(ts)
 			self.ds.data_records.append(dr)
 		self.ds.save()
-		try:
-			self.ds.drop_by("timestamp", arg_filter_value)
-			self.assertEqual(8, self.ds.records())
-		finally:
-			os.remove(self.expectedFile)
+		self.ds.drop_by("timestamp", arg_filter_value)
+		self.assertEqual(8, self.ds.records())
