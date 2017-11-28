@@ -72,6 +72,22 @@ def fake_dl_poll():
 # DataStore fakes
 #
 
+class FakeDataStore():
+
+	def __init__(self):
+		self.read_called = False
+		self.read_value = None
+		self.read_latest_called = False
+		self.read_latest_value = None
+
+	def read(self):
+		self.read_called = True
+		return self.read_value
+
+	def read_latest(self, n=1):
+		self.read_latest_called = True
+		return self.read_latest_value
+
 st_save_called = False
 def fake_st_save():
 	global st_save_called
@@ -250,6 +266,13 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.data_store.read = fake_st_read
 		self.dl._build_data_upload_request()
 		self.assertEqual(True, st_read_called)
+
+	def testBuildDataUploadRequest_callsDataStoreReadLatestWhenConfigParamDataRecordsPerServerUploadIsNotNone(self):
+		self.dl.config.data_records_per_server_upload = 5
+		self.dl.data_store = FakeDataStore()
+		self.dl.data_store.read_latest_value = [data_record.DataRecord().to_json()]
+		self.dl._build_data_upload_request()
+		self.assertEqual(True, self.dl.data_store.read_latest_called)
 
 	def testBuildDataUploadRequest_populatesRecords(self):
 		self.dl.data_store.read = fake_st_read # fake DataStore.read() so no filesystem access is performed

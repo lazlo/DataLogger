@@ -77,7 +77,12 @@ class DataLogger():
 
 	def _build_data_upload_request(self):
 		ur = data_upload_req.DataUploadRequest(self.config.system_name)
-		for json_rec in self.data_store.read():
+		dr_per_upload = self.config.data_records_per_server_upload
+		if dr_per_upload:
+			records = self.data_store.read_latest(dr_per_upload)
+		else:
+			records = self.data_store.read()
+		for json_rec in records:
 			rec = data_record.DataRecord.from_json(json_rec)
 			ur.records.append(rec)
 		return ur
