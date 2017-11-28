@@ -34,6 +34,11 @@ class DataStore():
 			rv.append(line.rstrip())
 		return rv
 
+	def read_latest(self, n=1):
+		rv = []
+		lines = self.read()
+		return lines[-n:]
+
 	def records(self):
 		return len(self.read())
 

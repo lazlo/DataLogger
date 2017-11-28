@@ -124,6 +124,22 @@ class DataStoreTestCase(unittest.TestCase):
 		self.assertEqual(expected, self.ds.read())
 
 	#
+	# read_latest()
+	#
+
+	def testReadLatest_returnsNLatestLine(self):
+		expected = []
+		for i in range(0, 10):
+			ts = "2017-11-28T%02d:00:00" % (2 + i)
+			dr = data_record.DataRecord(ts)
+			self.ds.data_records.append(dr)
+			if i > 7:
+				expected.append(dr.to_json())
+		print expected
+		self.ds.save()
+		self.assertEqual(expected, self.ds.read_latest(2))
+
+	#
 	# drop_by()
 	#
 
