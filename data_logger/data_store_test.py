@@ -135,7 +135,6 @@ class DataStoreTestCase(unittest.TestCase):
 			self.ds.data_records.append(dr)
 			if i > 7:
 				expected.append(dr.to_json())
-		print expected
 		self.ds.save()
 		self.assertEqual(expected, self.ds.read_latest(2))
 
