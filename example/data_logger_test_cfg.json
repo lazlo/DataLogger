@@ -5,6 +5,7 @@
 	"server_password":			"soyuz",
 	"server_upload_period_sec":		30,
 	"server_poll_period_sec":		10,
+	"data_records_per_server_upload":	10,
 	"data_dir":				"test-datadir",
 	"data_inputs_sample_period_sec":	1,
 	"data_inputs_storage_period_sec":	5,
