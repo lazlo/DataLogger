@@ -7,6 +7,6 @@ Collects data from various system inputs, forwards them to a remote server or st
 ## Dependencies
 
 ```
-apt-get install -y python-pip
+apt-get install -y python-setuptools python-pip
 sudo pip2 install gps3
 ```
