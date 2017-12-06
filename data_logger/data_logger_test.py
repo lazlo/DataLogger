@@ -136,23 +136,19 @@ def fake_logging_basic_config(format=None):
 	logging_basic_config_called = True
 	logging_basic_config_arg_format = format
 
-log_debug_called = False
-def fake_log_debug(msg):
-	global log_debug_called
-	log_debug_called = True
-
 class FakeLogger():
 
 	def __init__(self):
 		self.error_called = False
 		self.error_arg = None
+		self.debug_called = False
 
 	def error(self, msg):
 		self.error_called = True
 		self.error_arg = msg
 
 	def debug(self, msg):
-		return
+		self.debug_called = True
 
 class DataLoggerTestCase(unittest.TestCase):
 
@@ -264,11 +260,9 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.assertEqual(3, len(self.dl.data_store.data_records))
 
 	def testGetData_callsLogDebug(self):
-		global log_debug_called
-		log_debug_called = False
-		self.dl.log.debug = fake_log_debug
+		self.dl.log = FakeLogger()
 		self.dl.get_data()
-		self.assertEqual(True, log_debug_called)
+		self.assertEqual(True, self.dl.log.debug_called)
 
 	#
 	# save_data()
@@ -283,12 +277,10 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.assertEqual(True, st_save_latest_called)
 
 	def testSaveData_callsLogDebug(self):
-		global log_debug_called
-		log_debug_called = False
 		self.dl.data_store.save = fake_st_save
-		self.dl.log.debug = fake_log_debug
+		self.dl.log = FakeLogger()
 		self.dl.save_data()
-		self.assertEqual(True, log_debug_called)
+		self.assertEqual(True, self.dl.log.debug_called)
 
 	#
 	# _build_data_upload_request()
@@ -428,12 +420,10 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.assertEqual(["timestamp", expected_filter_values], st_drop_by_args)
 
 	def testUpload_callsLogDebug(self):
-		global log_debug_called
-		log_debug_called = False
-		self.dl.log.debug = fake_log_debug
+		self.dl.log = FakeLogger()
 		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
 		self.dl.upload()
-		self.assertEqual(True, log_debug_called)
+		self.assertEqual(True, self.dl.log.debug_called)
 
 	#
 	# update()
