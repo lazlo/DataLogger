@@ -176,6 +176,13 @@ class DataLoggerTestCase(unittest.TestCase):
 		logging.basicConfig = logging_basic_config_ptr_original
 		os.rmdir(self.expectedCfg.data_dir)
 
+	def _fake_data_inputs(self):
+		for di in self.dl.data_inputs:
+			# install fake get_data() on DataInput (so the actual functionality of the
+			# DataInput will not be executed (as that would require for even more code
+			# to mock
+			di.get_data = fake_di_get_data
+
 	#
 	# __ini__()
 	#
@@ -263,6 +270,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.assertEqual(len(self.dl.config.data_record_format), di_get_data_called_ntimes)
 
 	def testGetData_appendsDataRecordToDataStoreDataRecords(self):
+		self._fake_data_inputs()
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
 		self.dl.get_data()
 		self.dl.get_data()
@@ -270,6 +278,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.assertEqual(3, len(self.dl.data_store.data_records))
 
 	def testGetData_callsLogDebug(self):
+		self._fake_data_inputs()
 		self.dl.get_data()
 		self.assertEqual(True, self.dl.log.debug_called)
 
@@ -438,6 +447,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		global time_value
 		time_value = self.expectedStartupTimeSec + self.dl.sch_update_period_sec
 		expected = time_value + self.dl.sch_update_period_sec
+		self._fake_data_inputs()
 		self.dl._time = fake_time
 		self.dl.sch.tasks[2].fp = fake_dl_upload # fake upload so no file access is performed via _build_data_upload_request() and DataStore.read()
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
@@ -473,6 +483,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		global dl_save_data_called
 		time_value = self.expectedStartupTimeSec + self.expectedCfg.data_inputs_storage_period_sec
 		dl_save_data_called = False
+		self._fake_data_inputs()
 		self.dl._time = fake_time
 		self.dl.sch.tasks[1].fp = fake_dl_save_data
 		self.dl.sch.tasks[2].fp = fake_dl_upload # also fake upload as the scheduling period can be the same as the task under test
@@ -487,6 +498,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		global dl_upload_called
 		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_upload_period_sec
 		dl_upload_called = False
+		self._fake_data_inputs()
 		self.dl._time = fake_time
 		self.dl.sch.tasks[2].fp = fake_dl_upload
 		self.dl.data_store.save = fake_st_save # override save() so no file will be created
@@ -508,6 +520,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		global dl_poll_called
 		time_value = self.expectedStartupTimeSec + self.expectedCfg.server_poll_period_sec
 		dl_poll_called = False
+		self._fake_data_inputs()
 		self.dl._time = fake_time
 		self.dl.sch.tasks[2].fp = fake_dl_upload # also fake upload as the scheduling period can be the same as for poll
 		self.dl.sch.tasks[3].fp = fake_dl_poll
