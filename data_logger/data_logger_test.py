@@ -136,7 +136,7 @@ def fake_logging_basic_config(format=None):
 	logging_basic_config_called = True
 	logging_basic_config_arg_format = format
 
-class FakeLogger():
+class FakeLogger(logging.Logger):
 
 	def __init__(self):
 		self.error_called = False
@@ -168,6 +168,8 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.expectedCfg.load_file(self.expectedCfgFile)
 		os.mkdir(self.expectedCfg.data_dir)
 		self.dl = data_logger.DataLogger(self.expectedCfg)
+		# Override logger
+		self.dl.log = FakeLogger()
 
 	def tearDown(self):
 		# Restore ptr to logging.basicConfig
@@ -260,7 +262,6 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.assertEqual(3, len(self.dl.data_store.data_records))
 
 	def testGetData_callsLogDebug(self):
-		self.dl.log = FakeLogger()
 		self.dl.get_data()
 		self.assertEqual(True, self.dl.log.debug_called)
 
@@ -278,7 +279,6 @@ class DataLoggerTestCase(unittest.TestCase):
 
 	def testSaveData_callsLogDebug(self):
 		self.dl.data_store.save = fake_st_save
-		self.dl.log = FakeLogger()
 		self.dl.save_data()
 		self.assertEqual(True, self.dl.log.debug_called)
 
@@ -387,7 +387,6 @@ class DataLoggerTestCase(unittest.TestCase):
 		ds_upload_value = False
 		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
 		self.dl.data_server.upload = fake_ds_upload
-		self.dl.log = FakeLogger()
 		self.dl.upload()
 		self.assertEqual(True, self.dl.log.error_called)
 
@@ -396,7 +395,6 @@ class DataLoggerTestCase(unittest.TestCase):
 		ds_upload_value = False
 		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
 		self.dl.data_server.upload = fake_ds_upload
-		self.dl.log = FakeLogger()
 		self.dl.upload()
 		self.assertEqual(True, self.dl.log.error_arg.startswith("upload failed"))
 
@@ -420,7 +418,6 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.assertEqual(["timestamp", expected_filter_values], st_drop_by_args)
 
 	def testUpload_callsLogDebug(self):
-		self.dl.log = FakeLogger()
 		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
 		self.dl.upload()
 		self.assertEqual(True, self.dl.log.debug_called)
