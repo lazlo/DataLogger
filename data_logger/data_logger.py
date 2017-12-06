@@ -11,6 +11,7 @@ import logging
 
 class DataLogger():
 
+	DEFAULT_CONFIG_FILE_NAME = "data_logger_cfg.json"
 	DEFAULT_SCHED_UPDATE_PERIOD_SEC = 1
 
 	def __init__(self, config):

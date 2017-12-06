@@ -1,12 +1,14 @@
 import unittest
 import json
+import os
 
 import config
+import data_logger
 
 class ConfigTestCase(unittest.TestCase):
 
 	def setUp(self):
-		self.test_cfg_file = "../example/data_logger_cfg.json"
+		self.test_cfg_file = os.path.join("..", "example", data_logger.DataLogger.DEFAULT_CONFIG_FILE_NAME)
 		self.cfg = config.Config()
 		self.cfg.system_name = "cargoContainer-23"
 		self.cfg.server_addr = "localhost"

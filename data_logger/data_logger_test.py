@@ -163,7 +163,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		logging.basicConfig = fake_logging_basic_config
 
 		self.expectedStartupTimeSec = int(time.time())
-		self.expectedCfgFile = "../example/data_logger_cfg.json"
+		self.expectedCfgFile = os.path.join("..", "example", data_logger.DataLogger.DEFAULT_CONFIG_FILE_NAME)
 		self.expectedCfg = config.Config()
 		self.expectedCfg.load_file(self.expectedCfgFile)
 		os.mkdir(self.expectedCfg.data_dir)
