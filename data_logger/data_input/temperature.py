@@ -1,4 +1,6 @@
 import sensor
 
 class Temperature(sensor.Sensor):
-	pass
+
+	def get_data(self):
+		return 0.0

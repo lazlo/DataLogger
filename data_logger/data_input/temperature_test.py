@@ -8,5 +8,5 @@ class TemperatureTestCase(unittest.TestCase):
 		self.expectedName = "Room 42"
 		self.t = temperature.Temperature(self.expectedName)
 
-	def testFoo(self):
-		self.assertEqual(True, True)
+	def testGetData_returnsFloat(self):
+		self.assertEqual(True, type(self.t.get_data()) is float)
