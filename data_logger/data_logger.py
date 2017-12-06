@@ -14,8 +14,7 @@ class DataLogger():
 	DEFAULT_SCHED_UPDATE_PERIOD_SEC = 1
 
 	def __init__(self, config):
-		logging.basicConfig(format="%(asctime)s %(levelname)s %(filename)s:%(lineno)d %(funcName)s() %(message)s")
-		self.log = logging.getLogger()
+		self._init_logging()
 		self.startup_time_sec = self._time()
 		self.config = config
 		self.data_store = data_store.DataStore(self.config.data_dir)
@@ -27,6 +26,11 @@ class DataLogger():
 		self.sch = data_logger_sched.DataLoggerScheduler()
 		self.next_sched_update_time_sec		= self.startup_time_sec + self.sch_update_period_sec
 		self._init_sched_tasks()
+
+	def _init_logging(self):
+		logging_format = "%(asctime)s %(levelname)s %(filename)s:%(lineno)d %(funcName)s() %(message)s"
+		logging.basicConfig(format=logging_format)
+		self.log = logging.getLogger()
 
 	def _init_sched_tasks(self):
 		period = self.config.data_inputs_sample_period_sec
