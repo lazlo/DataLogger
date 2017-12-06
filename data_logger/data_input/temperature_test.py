@@ -32,3 +32,6 @@ class TemperatureTestCase(unittest.TestCase):
 	def testGetData_readsLinesFromFileSpecifiedAsPath(self):
 		self.t.get_data()
 		self.assertEqual(self.expectedLines, self.t.lines)
+
+	def testGetData_parsesTemperatureInCelsiusAsFloatFromLines(self):
+		self.assertEqual(24.062, self.t.get_data())
