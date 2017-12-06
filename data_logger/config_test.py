@@ -6,7 +6,7 @@ import config
 class ConfigTestCase(unittest.TestCase):
 
 	def setUp(self):
-		self.test_cfg_file = "../example/data_logger_test_cfg.json"
+		self.test_cfg_file = "../example/data_logger_cfg.json"
 		self.cfg = config.Config()
 		self.cfg.system_name = "cargoContainer-23"
 		self.cfg.server_addr = "localhost"

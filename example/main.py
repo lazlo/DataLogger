@@ -13,7 +13,7 @@ import data_logger
 
 def main():
 	cfg = data_logger.Config()
-	cfg.load_file("data_logger_test_cfg.json")
+	cfg.load_file("data_logger_cfg.json")
 	dl = data_logger.DataLogger(cfg)
 	while True:
 		dl.update()
