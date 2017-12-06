@@ -127,6 +127,15 @@ def fake_ds_upload(body):
 	ds_upload_arg = body
 	return ds_upload_value
 
+logging_basic_config_ptr_original = None
+logging_basic_config_called = False
+logging_basic_config_arg_format = None
+def fake_logging_basic_config(format=None):
+	global logging_basic_config_called
+	global logging_basic_config_arg_format
+	logging_basic_config_called = True
+	logging_basic_config_arg_format = format
+
 log_debug_called = False
 def fake_log_debug(msg):
 	global log_debug_called
@@ -135,6 +144,15 @@ def fake_log_debug(msg):
 class DataLoggerTestCase(unittest.TestCase):
 
 	def setUp(self):
+		global logging_basic_config_called
+		global logging_basic_config_arg_format
+		global logging_basic_config_ptr_original
+		logging_basic_config_called = False
+		logging_basic_config_arg_format = None
+		# Save ptr to logging.basicConfig
+		logging_basic_config_ptr_original = logging.basicConfig
+		logging.basicConfig = fake_logging_basic_config
+
 		self.expectedStartupTimeSec = int(time.time())
 		self.expectedCfgFile = "../example/data_logger_test_cfg.json"
 		self.expectedCfg = config.Config()
@@ -143,6 +161,8 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl = data_logger.DataLogger(self.expectedCfg)
 
 	def tearDown(self):
+		# Restore ptr to logging.basicConfig
+		logging.basicConfig = logging_basic_config_ptr_original
 		os.rmdir(self.expectedCfg.data_dir)
 
 	#
@@ -151,6 +171,13 @@ class DataLoggerTestCase(unittest.TestCase):
 
 	def testInit_logIsLoggerInstance(self):
 		self.assertEqual(True, isinstance(self.dl.log, logging.Logger))
+
+	def testInit_callsLoggingBasicConfig(self):
+		self.assertEqual(True, logging_basic_config_called)
+
+	def testInit_callsLoggingBasicConfigWithArgumentFormat(self):
+		expected = "%(asctime)s %(levelname)s %(filename)s:%(lineno)d %(funcName)s() %(message)s"
+		self.assertEqual(expected, logging_basic_config_arg_format)
 
 	def testInit_startupTimeSecIsSetToNow(self):
 		dl = data_logger.DataLogger(self.expectedCfg)

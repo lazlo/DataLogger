@@ -14,6 +14,7 @@ class DataLogger():
 	DEFAULT_SCHED_UPDATE_PERIOD_SEC = 1
 
 	def __init__(self, config):
+		logging.basicConfig(format="%(asctime)s %(levelname)s %(filename)s:%(lineno)d %(funcName)s() %(message)s")
 		self.log = logging.getLogger()
 		self.startup_time_sec = self._time()
 		self.config = config
