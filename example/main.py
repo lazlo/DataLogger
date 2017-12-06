@@ -10,10 +10,14 @@
 # is not available.
 
 import data_logger
+import sys
 
 def main():
+	cfg_file = data_logger.DataLogger.DEFAULT_CONFIG_FILE_NAME
+	if len(sys.argv) > 1:
+		cfg_file = sys.argv[1]
 	cfg = data_logger.Config()
-	cfg.load_file(data_logger.DataLogger.DEFAULT_CONFIG_FILE_NAME)
+	cfg.load_file(cfg_file)
 	dl = data_logger.DataLogger(cfg)
 	while True:
 		dl.update()
