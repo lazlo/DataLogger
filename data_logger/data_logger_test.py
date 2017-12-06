@@ -232,6 +232,14 @@ class DataLoggerTestCase(unittest.TestCase):
 				break
 		self.assertEqual(True, ofExpectedType)
 
+	def testInit_dataInputsPassesArgsDictFromConfigToObject(self):
+		for obj in self.dl.data_inputs:
+			di_cfg = self.dl.config.get_data_input(obj.name)
+			if not "args" in di_cfg.keys():
+				continue
+			# NOTE to self ... never assert in loops!
+			self.assertEqual(obj.args, di_cfg["args"])
+
 	#
 	# get_data()
 	#

@@ -58,7 +58,10 @@ class DataLogger():
 	def _populate_data_inputs(self):
 		for di_cfg in self.config.data_inputs:
 			di_class = getattr(data_input, di_cfg["class"])
-			di_obj = di_class(di_cfg["name"])
+			args = None
+			if "args" in di_cfg.keys():
+				args = di_cfg["args"]
+			di_obj = di_class(di_cfg["name"], args)
 			self.data_inputs.append(di_obj)
 
 	def _get_data_input(self, name):
