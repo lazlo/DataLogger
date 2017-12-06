@@ -8,6 +8,9 @@ class DataInputTestCase(unittest.TestCase):
 		self.expectedName = "Room 1 Temperature"
 		self.di = data_input.DataInput(self.expectedName)
 
+	def testInit_argsIsNoneByDefault(self):
+		self.assertEqual(None, self.di.args)
+
 	def testName_isSet(self):
 		self.assertEqual(self.expectedName, self.di.name)
 
