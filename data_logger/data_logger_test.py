@@ -141,6 +141,19 @@ def fake_log_debug(msg):
 	global log_debug_called
 	log_debug_called = True
 
+class FakeLogger():
+
+	def __init__(self):
+		self.error_called = False
+		self.error_arg = None
+
+	def error(self, msg):
+		self.error_called = True
+		self.error_arg = msg
+
+	def debug(self, msg):
+		return
+
 class DataLoggerTestCase(unittest.TestCase):
 
 	def setUp(self):
@@ -377,6 +390,24 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl.upload()
 		self.assertEqual(False, st_drop_by_called)
 
+	def testUpload_callsLogErrorWhenDataServerUploadReturnsFalse(self):
+		global ds_upload_value
+		ds_upload_value = False
+		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
+		self.dl.data_server.upload = fake_ds_upload
+		self.dl.log = FakeLogger()
+		self.dl.upload()
+		self.assertEqual(True, self.dl.log.error_called)
+
+	def testUpload_callsLogErrorWithArgMsgWhenDataServerUploadReturnsFalse(self):
+		global ds_upload_value
+		ds_upload_value = False
+		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
+		self.dl.data_server.upload = fake_ds_upload
+		self.dl.log = FakeLogger()
+		self.dl.upload()
+		self.assertEqual(True, self.dl.log.error_arg.startswith("upload failed"))
+
 	def testUpload_callsDataStoreDropByWithTimestampOfDataRecordsFromUploadRequest(self):
 		global dl_build_data_upload_request_value
 		global ds_upload_value
@@ -403,6 +434,7 @@ class DataLoggerTestCase(unittest.TestCase):
 		self.dl._build_data_upload_request = fake_dl_build_data_upload_request
 		self.dl.upload()
 		self.assertEqual(True, log_debug_called)
+
 	#
 	# update()
 	#

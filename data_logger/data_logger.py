@@ -93,6 +93,7 @@ class DataLogger():
 		ur = self._build_data_upload_request()
 		upload_ok = self.data_server.upload(ur.to_json())
 		if not upload_ok:
+			self.log.error("upload failed")
 			return
 		filter_key = "timestamp"
 		filter_value = []
