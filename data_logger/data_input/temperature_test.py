@@ -11,7 +11,7 @@ class TemperatureTestCase(unittest.TestCase):
 		self.expectedArgs = {"path": self.expectedFile}
 		self.expectedLines = []
 		self.expectedLines.append("81 01 4b 01 7f ff 0c 10 9c : crc=9c YES\n")
-		self.expectedLines.append("81 01 4b 01 7f ff 0c 10 9c t=24062\n")
+		self.expectedLines.append("81 01 4b 01 7f ff 0c 10 9c t=-24062\n")
 
 		self._init_fake_sensor_file(self.expectedFile, self.expectedLines)
 
@@ -34,4 +34,4 @@ class TemperatureTestCase(unittest.TestCase):
 		self.assertEqual(self.expectedLines, self.t.lines)
 
 	def testGetData_parsesTemperatureInCelsiusAsFloatFromLines(self):
-		self.assertEqual(24.062, self.t.get_data())
+		self.assertEqual(-24.062, self.t.get_data())

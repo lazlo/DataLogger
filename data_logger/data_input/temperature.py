@@ -16,7 +16,7 @@ class Temperature(sensor.Sensor):
 		return lines
 
 	def _parse_temp_from_lines(self):
-		m = re.search("t=(?P<temp>\d+)", self.lines[1])
+		m = re.search("t=(?P<temp>-?\d+)", self.lines[1])
 		return float(m.group("temp")) / 1000.0
 
 	def get_data(self):
