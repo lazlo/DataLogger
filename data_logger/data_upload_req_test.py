@@ -17,15 +17,23 @@ class DataUploadRequestTestCase(unittest.TestCase):
 		self.assertEqual(True, isinstance(self.req.records, list))
 
 	def testToJSON(self):
-		expected = json.dumps(self.req.__dict__).replace("logger_name", "LoggerName")
+		expected = json.dumps(self.req.__dict__)
+		expected = expected.replace("logger_name", "LoggerName")
+		expected = expected.replace(" ", "")
 		self.assertEqual(expected, self.req.to_json())
 
 	def testToJSON_worksOnRecordsToo(self):
 		self.req.records.append(data_record.DataRecord())
 		self.req.records.append(data_record.DataRecord())
 		self.req.records.append(data_record.DataRecord())
-		expected = json.dumps(self.req.__dict__, cls=custom_json.CustomJSONEncoder).replace("logger_name", "LoggerName")
+		expected = json.dumps(self.req.__dict__, cls=custom_json.CustomJSONEncoder)
+		expected = expected.replace("logger_name", "LoggerName")
+		expected = expected.replace(" ", "")
 		self.assertEqual(expected, self.req.to_json())
 
 	def testToJSON_replacesLoggerNameWithCamleCase(self):
 		self.assertEqual(True, "LoggerName" in self.req.to_json())
+
+	def testToJSON_stripsWhitespaces(self):
+		expected = json.dumps(self.req.__dict__).replace("logger_name", "LoggerName").replace(" ", "")
+		self.assertEqual(expected, self.req.to_json())

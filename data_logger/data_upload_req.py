@@ -9,4 +9,5 @@ class DataUploadRequest():
 	def to_json(self):
 		s = json.dumps(self.__dict__, cls=custom_json.CustomJSONEncoder)
 		s = s.replace("logger_name", "LoggerName")
+		s = s.replace(" ", "")
 		return s
